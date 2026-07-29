@@ -28,8 +28,6 @@
             <div class="login-logo brand-icon-gradient">
                 <?= render_icon('graduation-cap', ['style' => 'width: 24px; height: 24px; color: #fff;']) ?>
             </div>
-            <h1>Leksika</h1>
-            <p>Orisinalitas Skripsi</p>
         </div>
 
         <div id="alert-container">
@@ -73,7 +71,7 @@
                 >
             </div>
             <button type="submit" class="btn btn-primary login-submit" id="btn-login">
-                <?= render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;']) ?> Masuk ke Sistem
+                <?= render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;']) ?> Masuk
             </button>
         </form>
 
@@ -141,7 +139,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             if (data.error) {
                 showError(data.error);
                 btnLogin.disabled = false;
-                btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk ke Sistem';
+                btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk';
                 return;
             }
             if (data.redirect) {
@@ -160,7 +158,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
                 showError('Gagal masuk: ' + err.message);
             }
             btnLogin.disabled = false;
-            btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk ke Sistem';
+            btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk';
         });
 });
 

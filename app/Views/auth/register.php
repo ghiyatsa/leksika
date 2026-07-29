@@ -28,8 +28,6 @@
             <div class="login-logo brand-icon-gradient">
                 <?= render_icon('graduation-cap', ['style' => 'width: 24px; height: 24px; color: #fff;']) ?>
             </div>
-            <h1>Leksika</h1>
-            <p>Orisinalitas Skripsi</p>
         </div>
 
         <div id="firebase-alerts"></div>
