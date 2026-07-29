@@ -88,7 +88,7 @@ class AuthController extends BaseController
     public function forgotPassword(): \CodeIgniter\HTTP\ResponseInterface|string
     {
         if ($this->request->is('post')) {
-            $email = $this->request->getJsonVar('email');
+            $email = $this->request->getPost('email');
 
             if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return $this->response->setJSON([

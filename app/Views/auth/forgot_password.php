@@ -75,8 +75,8 @@ document.getElementById('forgot-form').addEventListener('submit', function(e) {
 
     fetch('<?= base_url('auth/forgot-password') ?>', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email }),
     })
     .then(r => r.json())
     .then(data => {
