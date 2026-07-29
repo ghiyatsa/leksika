@@ -76,7 +76,7 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'csrf' => ['except' => ['auth/firebaseLogin']],
+            'csrf' => ['except' => ['auth/firebaseLogin', 'auth/forgot-password']],
             // 'honeypot',
             // 'invalidchars',
         ],
