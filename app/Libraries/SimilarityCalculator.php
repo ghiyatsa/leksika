@@ -196,7 +196,7 @@ class SimilarityCalculator
             $category     = $this->getResultCategory($hybrid, $st, $rt);
 
             $results[] = [
-                'thesis_title_id'  => $thesis['id'],
+                'thesis_id'        => $thesis['id'],
                 'thesis_title'     => $thesis['title'],
                 'thesis_keyword'   => $thesis['keyword'],
                 'nim'              => $thesis['nim'],

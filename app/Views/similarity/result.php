@@ -22,14 +22,6 @@
             <?= esc($check['input_title']) ?>
         </div>
     </div>
-    <?php if ($check['input_keyword']): ?>
-        <div class="text-muted text-sm">
-            <strong>Keyword:</strong>
-            <?php foreach (explode(',', $check['input_keyword']) as $kw): ?>
-                <span class="tag"><?= esc(trim($kw)) ?></span>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
     <div class="text-muted text-sm mt-2">
         Diperiksa oleh: <strong><?= esc($check['user_name']) ?></strong> ·
         Total pembanding: <strong><?= count($details) ?></strong> judul

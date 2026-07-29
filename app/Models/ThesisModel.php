@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class ThesisModel extends Model
 {
-    protected $table            = 'thesis_titles';
+    protected $table            = 'thesis';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['student_id', 'category_id', 'title', 'keyword', 'abstract', 'year', 'attachment_file', 'preprocessed_text'];
+    protected $allowedFields    = ['student_id', 'category_id', 'title', 'keyword', 'abstract', 'year', 'preprocessed_text'];
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
@@ -26,7 +26,7 @@ class ThesisModel extends Model
 
     public function getWithRelations(string $search = '', int $perPage = 10, int $page = 1): array
     {
-        $builder = $this->db->table('thesis_titles tt')
+        $builder = $this->db->table('thesis tt')
             ->select('tt.*, s.student_id AS nim, s.name AS student_name, tc.category_name')
             ->join('students s', 's.id = tt.student_id')
             ->join('topic_categories tc', 'tc.id = tt.category_id')
@@ -57,7 +57,7 @@ class ThesisModel extends Model
 
     public function getDetailById(int $id): array|null
     {
-        return $this->db->table('thesis_titles tt')
+        return $this->db->table('thesis tt')
             ->select('tt.*, s.student_id AS nim, s.name AS student_name, tc.category_name')
             ->join('students s', 's.id = tt.student_id')
             ->join('topic_categories tc', 'tc.id = tt.category_id')
@@ -68,7 +68,7 @@ class ThesisModel extends Model
 
     public function getAllForSimilarity(): array
     {
-        return $this->db->table('thesis_titles tt')
+        return $this->db->table('thesis tt')
             ->select('tt.id, tt.title, tt.keyword, tt.preprocessed_text, s.student_id AS nim, s.name AS student_name, tc.category_name, tt.year')
             ->join('students s', 's.id = tt.student_id')
             ->join('topic_categories tc', 'tc.id = tt.category_id')

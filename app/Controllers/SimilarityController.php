@@ -64,16 +64,14 @@ class SimilarityController extends BaseController
         $db->transStart();
 
         $checkId = $this->checkModel->insert([
-            'user_id'       => session()->get('userId'),
-            'uuid'          => $uuid,
-            'input_title'   => $inputTitle,
-            'input_keyword' => '',
-            'checked_at'    => date('Y-m-d H:i:s'),
+            'user_id'     => session()->get('userId'),
+            'uuid'        => $uuid,
+            'input_title' => $inputTitle,
         ]);
 
         $details = array_map(fn ($r) => [
-            'check_id'        => $checkId,
-            'thesis_title_id' => $r['thesis_title_id'],
+            'check_id'  => $checkId,
+            'thesis_id' => $r['thesis_id'],
             'cosine_score'    => $r['cosine_score'],
             'jaccard_score'   => $r['jaccard_score'],
             'hybrid_score'    => $r['hybrid_score'],

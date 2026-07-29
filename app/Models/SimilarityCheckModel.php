@@ -12,7 +12,7 @@ class SimilarityCheckModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_id', 'uuid', 'input_title', 'input_keyword', 'checked_at'];
+    protected $allowedFields    = ['user_id', 'uuid', 'input_title', 'checked_at'];
     protected $useTimestamps    = true;
     protected $createdField     = 'checked_at';
     protected $updatedField     = '';
@@ -20,7 +20,7 @@ class SimilarityCheckModel extends Model
     public function getHistory(?int $userId = null, string $dateFrom = '', string $dateTo = ''): array
     {
         $builder = $this->db->table('similarity_checks sc')
-            ->select('sc.*, u.name AS user_name, u.email AS user_email, u.role, (SELECT MAX(hybrid_score) FROM similarity_check_details WHERE check_id = sc.id) AS max_hybrid_score')
+            ->select('sc.*, u.name AS user_name, u.role, (SELECT MAX(hybrid_score) FROM similarity_check_details WHERE check_id = sc.id) AS max_hybrid_score')
             ->join('users u', 'u.id = sc.user_id')
             ->orderBy('sc.checked_at', 'DESC');
 
@@ -37,20 +37,10 @@ class SimilarityCheckModel extends Model
         return $builder->get()->getResultArray();
     }
 
-    public function getCheckWithUser(int $checkId): array|null
-    {
-        return $this->db->table('similarity_checks sc')
-            ->select('sc.*, u.name AS user_name, u.email AS user_email')
-            ->join('users u', 'u.id = sc.user_id')
-            ->where('sc.id', $checkId)
-            ->get()
-            ->getRowArray();
-    }
-
     public function getCheckByUuid(string $uuid): array|null
     {
         return $this->db->table('similarity_checks sc')
-            ->select('sc.*, u.name AS user_name, u.email AS user_email')
+            ->select('sc.*, u.name AS user_name')
             ->join('users u', 'u.id = sc.user_id')
             ->where('sc.uuid', $uuid)
             ->get()

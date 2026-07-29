@@ -52,11 +52,6 @@
                             <td class="text-mono text-muted text-sm"><?= $i + 1 ?></td>
                             <td style="max-width: 400px;">
                                 <div class="fw-bold td-truncate" style="word-break: break-word; overflow-wrap: break-word;"><?= esc($check['input_title']) ?></div>
-                                <?php if ($check['input_keyword']): ?>
-                                    <div class="text-muted text-sm" style="margin-top: 2px;">
-                                        <?= render_icon('key', ['style' => 'width: 12px; height: 12px; margin-right: 4px; vertical-align: text-bottom;']) ?><?= esc(mb_substr($check['input_keyword'], 0, 60)) ?>
-                                    </div>
-                                <?php endif; ?>
                             </td>
                             <?php if (session()->get('role') === 'admin'): ?>
                                 <td>

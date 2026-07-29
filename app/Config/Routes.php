@@ -39,8 +39,6 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
         $routes->get('thesis/(:num)/edit', 'Admin\ThesisTitleController::edit/$1');
         $routes->post('thesis/(:num)/update', 'Admin\ThesisTitleController::update/$1');
         $routes->post('thesis/(:num)/delete', 'Admin\ThesisTitleController::delete/$1');
-        $routes->get('thesis/(:num)/download', 'Admin\ThesisTitleController::download/$1');
-
         // Students CRUD
         $routes->get('students', 'Admin\StudentController::index');
         $routes->get('students/create', 'Admin\StudentController::create');

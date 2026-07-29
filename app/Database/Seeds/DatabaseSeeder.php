@@ -536,7 +536,7 @@ class DatabaseSeeder extends Seeder
         $this->db->table('students')->insertBatch($students);
 
         // ── 4. THESIS TITLES ──────────────────────────────────────────
-        $this->db->table('thesis_titles')->truncate();
+        $this->db->table('thesis')->truncate();
         // We use DB query to get the inserted student IDs
         $studentsDb = $this->db->table('students')->get()->getResultArray();
         $nimToId = [];
@@ -1035,7 +1035,7 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
         foreach ($thesisData as $th) {
             $studId = $nimToId[$th['nim']] ?? null;
             if (!$studId) continue;
-            $this->db->table('thesis_titles')->insert([
+            $this->db->table('thesis')->insert([
                 'student_id'  => $studId,
                 'category_id' => $th['category_id'],
                 'title'       => $th['title'],
