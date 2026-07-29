@@ -157,6 +157,10 @@ class ProfileController extends BaseController
             return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
         }
 
+        if ($user['email'] === 'admin@leksika.com') {
+            return redirect()->back()->with('error', 'Akun admin utama tidak dapat dihapus.');
+        }
+
         if (!empty($user['avatar'])) {
             $avatarPath = FCPATH . 'uploads/avatars/' . $user['avatar'];
             if (file_exists($avatarPath)) {

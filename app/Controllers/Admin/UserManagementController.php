@@ -133,6 +133,10 @@ class UserManagementController extends BaseController
             return redirect()->to(base_url('admin/users'))->with('error', 'Data tidak ditemukan.');
         }
 
+        if ($user['email'] === 'admin@leksika.com') {
+            return redirect()->to(base_url('admin/users'))->with('error', 'Akun admin utama tidak dapat dihapus.');
+        }
+
         if ($user['firebase_uid']) {
             $firebase = service('firebaseAuth');
             $firebase->deleteUser($user['firebase_uid']);
