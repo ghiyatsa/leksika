@@ -126,3 +126,9 @@ _modules/*
 
 /results/
 /phpunit.xml
+
+# CI4 session files
+/public/null/*
+
+# User uploaded avatars
+/public/uploads/avatars/*
