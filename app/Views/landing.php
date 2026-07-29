@@ -21,6 +21,10 @@
 </head>
 
 <body class="landing-body">
+<a href="#main-content" class="skip-link">Langsung ke konten utama</a>
+
+<?= $this->include('partials/landing_header', ['isLoggedIn' => $isLoggedIn]) ?>
+
 <!-- Hero Section -->
 <header class="hero-section" id="main-content">
     <div class="hero-card-banner">

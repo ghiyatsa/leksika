@@ -1434,7 +1434,7 @@ tbody td {
 /* Mobile nav toggle */
 /* Hero Section */
 .hero-section {
-    padding-top: 60px;
+    padding-top: 140px;
     padding-bottom: 80px;
     min-height: auto;
     display: flex;
@@ -1834,10 +1834,6 @@ tbody td {
         gap: 8px;
     }
 
-    .nav-links .nav-link {
-        display: none;
-    }
-
     .theme-toggle-btn {
         width: 30px;
         height: 30px;
@@ -1855,7 +1851,7 @@ tbody td {
     }
 
     .hero-section {
-        padding-top: 40px;
+        padding-top: 100px;
         padding-bottom: 48px;
     }
 

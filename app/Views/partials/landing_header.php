@@ -10,9 +10,6 @@
             </div>
         </a>
         <div class="nav-links">
-            <a href="<?= base_url('/#tentang') ?>" class="nav-link">Tentang</a>
-            <a href="<?= base_url('/#metodologi') ?>" class="nav-link">Metodologi</a>
-            <a href="<?= base_url('similarity') ?>" class="nav-link">Cek Kemiripan</a>
             <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
                 <span class="sun-icon"><?= render_icon('sun') ?></span>
                 <span class="moon-icon"><?= render_icon('moon') ?></span>
