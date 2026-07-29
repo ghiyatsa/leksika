@@ -21,8 +21,19 @@ class FirebaseAuth
 
     public function verifyIdToken(string $idToken): ?object
     {
-        $keys    = $this->getPublicKeys();
-        $decoded = JWT::decode($idToken, $keys);
+        $keys = $this->getPublicKeys();
+
+        if (empty($keys)) {
+            log_message('error', 'Firebase public keys could not be fetched from Google');
+            return null;
+        }
+
+        try {
+            $decoded = JWT::decode($idToken, $keys);
+        } catch (\Exception $e) {
+            log_message('error', 'Firebase JWT decode failed: ' . $e->getMessage());
+            return null;
+        }
 
         if ($decoded->aud !== $this->config->projectId) {
             return null;
@@ -183,9 +194,14 @@ class FirebaseAuth
             return $this->cachedKeys;
         }
 
-        $client   = \Config\Services::curlrequest();
-        $response = $client->get('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com');
-        $certs    = json_decode($response->getBody(), true);
+        try {
+            $client   = \Config\Services::curlrequest();
+            $response = $client->get('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com');
+            $certs    = json_decode($response->getBody(), true);
+        } catch (\Exception $e) {
+            log_message('error', 'Firebase public keys fetch failed: ' . $e->getMessage());
+            return [];
+        }
 
         if (! $certs) {
             return [];
