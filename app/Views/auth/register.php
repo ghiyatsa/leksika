@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= filemtime(FCPATH . 'css/style.css') ?>">
+    <style>.login-card .form-group { margin-bottom: 14px; }</style>
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'light';
@@ -50,7 +51,7 @@
                 <input type="password" id="password-confirm" class="form-control" placeholder="Ulangi password" required minlength="6">
             </div>
             <button type="submit" class="btn btn-primary login-submit" id="btn-register">
-                <?= render_icon('user-plus', ['style' => 'width: 16px; height: 16px; margin-right: 4px;']) ?> Buat Akun
+                Buat Akun
             </button>
         </form>
 
@@ -119,7 +120,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     if (password !== confirm) {
         showError('Konfirmasi password tidak cocok.');
         btnRegister.disabled = false;
-        btnRegister.innerHTML = '<?= addslashes(render_icon('user-plus', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Buat Akun';
+        btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
         return;
     }
 
@@ -132,7 +133,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
             showSuccess('Akun berhasil dibuat! Email verifikasi telah dikirim ke <strong>' + escapeHtml(email) + '</strong>. Silakan cek email Anda.');
             document.getElementById('register-form').reset();
             btnRegister.disabled = false;
-            btnRegister.innerHTML = '<?= addslashes(render_icon('user-plus', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Buat Akun';
+            btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
         })
         .catch(err => {
             const code = err.code;
@@ -146,7 +147,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
                 showError('Gagal mendaftar: ' + err.message);
             }
             btnRegister.disabled = false;
-            btnRegister.innerHTML = '<?= addslashes(render_icon('user-plus', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Buat Akun';
+            btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
         });
 });
 

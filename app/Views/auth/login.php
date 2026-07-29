@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= filemtime(FCPATH . 'css/style.css') ?>">
+    <style>.login-card .form-group { margin-bottom: 14px; }</style>
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'light';
@@ -71,7 +72,7 @@
                 >
             </div>
             <button type="submit" class="btn btn-primary login-submit" id="btn-login">
-                <?= render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;']) ?> Masuk
+                Masuk
             </button>
         </form>
 
@@ -139,7 +140,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             if (data.error) {
                 showError(data.error);
                 btnLogin.disabled = false;
-                btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk';
+                btnLogin.innerHTML = '<?= addslashes('')) ?> Masuk';
                 return;
             }
             if (data.redirect) {
@@ -158,7 +159,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
                 showError('Gagal masuk: ' + err.message);
             }
             btnLogin.disabled = false;
-            btnLogin.innerHTML = '<?= addslashes(render_icon('lock', ['style' => 'width: 16px; height: 16px; margin-right: 4px;'])) ?> Masuk';
+            btnLogin.innerHTML = '<?= addslashes('')) ?> Masuk';
         });
 });
 
