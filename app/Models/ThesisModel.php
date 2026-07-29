@@ -17,30 +17,12 @@ class ThesisModel extends Model
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
 
-    // Callbacks for automatic preprocessing
-    protected $beforeInsert     = ['setPreprocessedText'];
-    protected $beforeUpdate     = ['setPreprocessedText'];
-
     protected $validationRules = [
         'student_id'  => 'required|integer',
         'category_id' => 'required|integer',
         'title'       => 'required|min_length[10]',
         'year'        => 'permit_empty|integer|min_length[4]|max_length[4]',
     ];
-
-    protected function setPreprocessedText(array $data): array
-    {
-        if (isset($data['data']['title'])) {
-            $title = $data['data']['title'] ?? '';
-            $keyword = $data['data']['keyword'] ?? '';
-            
-            $preprocessor = new \App\Libraries\TextPreprocessor();
-            $tokens = $preprocessor->preprocess($title . ' ' . $keyword);
-            
-            $data['data']['preprocessed_text'] = implode(' ', $tokens);
-        }
-        return $data;
-    }
 
     public function getWithRelations(string $search = '', int $perPage = 10, int $page = 1): array
     {

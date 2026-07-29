@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Libraries\FirebaseAuth;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AuthController extends BaseController
@@ -31,7 +30,7 @@ class AuthController extends BaseController
             ]);
         }
 
-        $firebase = new FirebaseAuth();
+        $firebase = service('firebaseAuth');
         $decoded  = $firebase->verifyIdToken($idToken);
 
         if (!$decoded) {
@@ -78,11 +77,6 @@ class AuthController extends BaseController
         return view('auth/register', [
             'firebaseConfig' => $firebaseConfig->clientConfig(),
         ]);
-    }
-
-    public function loginPost(): \CodeIgniter\HTTP\RedirectResponse
-    {
-        return redirect()->to(base_url('login'));
     }
 
     public function logout(): \CodeIgniter\HTTP\RedirectResponse

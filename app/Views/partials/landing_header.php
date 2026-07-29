@@ -18,7 +18,7 @@
                 <div class="user-dropdown">
                     <button class="avatar-btn" id="avatarDropdownBtn" aria-label="Menu pengguna" aria-haspopup="true" aria-expanded="false">
                         <?php $avatarSrc = get_avatar_src(session()->get() ?? []); if ($avatarSrc): ?>
-                            <img src="<?= $avatarSrc ?>" alt="Avatar" referrerpolicy="no-referrer" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            <img src="<?= esc($avatarSrc, 'attr') ?>" alt="Avatar" referrerpolicy="no-referrer" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         <?php else: ?>
                             <?= strtoupper(substr(session()->get('userName') ?? 'U', 0, 1)) ?>
                         <?php endif; ?>

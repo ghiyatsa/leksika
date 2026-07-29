@@ -3,7 +3,6 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Libraries\FirebaseAuth;
 use App\Models\UserModel;
 
 class UserManagementController extends BaseController
@@ -12,14 +11,19 @@ class UserManagementController extends BaseController
 
     public function __construct()
     {
-        $this->model = new UserModel();
+        $this->model = model(UserModel::class);
     }
 
     public function index(): string
     {
+        $search = $this->request->getGet('search') ?? '';
+        $page   = (int) ($this->request->getGet('page') ?? 1);
+        $result = $this->model->getPaginatedUsers($search, 10, $page);
+
         return view('admin/users/index', [
-            'title' => 'Manajemen Akun Pengguna',
-            'users' => $this->model->orderBy('name')->findAll(),
+            'title'  => 'Manajemen Akun Pengguna',
+            'result' => $result,
+            'search' => $search,
         ]);
     }
 
@@ -45,7 +49,7 @@ class UserManagementController extends BaseController
         $password = $this->request->getPost('password');
         $name     = $this->request->getPost('name');
 
-        $firebase = new FirebaseAuth();
+        $firebase = service('firebaseAuth');
         $uid      = $firebase->createUser($email, $password, $name);
 
         if (!$uid) {
@@ -99,7 +103,7 @@ class UserManagementController extends BaseController
         $newEmail    = $this->request->getPost('email');
         $newPassword = $this->request->getPost('password');
 
-        $firebase = new FirebaseAuth();
+        $firebase = service('firebaseAuth');
 
         if ($newEmail !== $user['email'] && $user['firebase_uid']) {
             $firebase->updateUserEmail($user['firebase_uid'], $newEmail);
@@ -130,7 +134,7 @@ class UserManagementController extends BaseController
         }
 
         if ($user['firebase_uid']) {
-            $firebase = new FirebaseAuth();
+            $firebase = service('firebaseAuth');
             $firebase->deleteUser($user['firebase_uid']);
         }
 

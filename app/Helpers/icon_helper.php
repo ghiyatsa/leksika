@@ -2,8 +2,8 @@
 
 if (!function_exists('render_icon')) {
     function render_icon(string $name, array $options = []): string {
-        $class = isset($options['class']) ? ' ' . $options['class'] : '';
-        $style = isset($options['style']) ? ' style="' . $options['style'] . '"' : '';
+        $class = isset($options['class']) ? ' ' . htmlspecialchars($options['class'], ENT_QUOTES | ENT_HTML5, 'UTF-8') : '';
+        $style = isset($options['style']) ? ' style="' . htmlspecialchars($options['style'], ENT_QUOTES | ENT_HTML5, 'UTF-8') . '"' : '';
         $viewBox = isset($options['viewBox']) ? $options['viewBox'] : '0 0 24 24';
         
         $icons = [

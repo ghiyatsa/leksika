@@ -11,14 +11,19 @@ class CategoryController extends BaseController
 
     public function __construct()
     {
-        $this->model = new TopicCategoryModel();
+        $this->model = model(TopicCategoryModel::class);
     }
 
     public function index(): string
     {
+        $search = $this->request->getGet('search') ?? '';
+        $page   = (int) ($this->request->getGet('page') ?? 1);
+        $result = $this->model->getPaginatedCategories($search, 10, $page);
+
         return view('admin/categories/index', [
             'title'      => 'Kelola Kategori Topik',
-            'categories' => $this->model->orderBy('category_name')->findAll(),
+            'result'     => $result,
+            'search'     => $search,
         ]);
     }
 

@@ -1049,10 +1049,11 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
 
         // ── 5. THRESHOLD SETTINGS ─────────────────────────────────────
         $this->db->table('threshold_settings')->insert([
-            'cosine_weight'     => 0.60,
-            'jaccard_weight'    => 0.40,
-            'similar_threshold' => 0.75,
-            'review_threshold'  => 0.40,
+            'cosine_weight'          => 0.60,
+            'jaccard_weight'         => 0.40,
+            'similar_threshold'      => 0.75,
+            'review_threshold'       => 0.40,
+            'max_similarity_results' => 5,
         ]);
 
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');

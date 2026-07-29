@@ -7,14 +7,18 @@ use App\Models\ThresholdSettingModel;
 
 class ThresholdController extends BaseController
 {
+    private ThresholdSettingModel $model;
+
+    public function __construct()
+    {
+        $this->model = model(ThresholdSettingModel::class);
+    }
+
     public function index(): string
     {
-        $model     = new ThresholdSettingModel();
-        $threshold = $model->getSettings();
-
         return view('admin/threshold/index', [
             'title'     => 'Pengaturan Sistem',
-            'threshold' => $threshold,
+            'threshold' => $this->model->getSettings(),
         ]);
     }
 
@@ -32,23 +36,20 @@ class ThresholdController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $cosineWeight    = (float) $this->request->getPost('cosine_weight');
-        $jaccardWeight   = (float) $this->request->getPost('jaccard_weight');
+        $cosineWeight     = (float) $this->request->getPost('cosine_weight');
+        $jaccardWeight    = (float) $this->request->getPost('jaccard_weight');
         $similarThreshold = (float) $this->request->getPost('similar_threshold');
         $reviewThreshold  = (float) $this->request->getPost('review_threshold');
 
-        // Validate weights sum
         if (abs(($cosineWeight + $jaccardWeight) - 1.0) > 0.001) {
             return redirect()->back()->withInput()->with('error', 'Total bobot Cosine + Jaccard harus sama dengan 1.0');
         }
 
-        // Validate threshold logic: review must be less than similar
         if ($reviewThreshold >= $similarThreshold) {
             return redirect()->back()->withInput()->with('error', 'Threshold "Perlu Ditinjau" harus lebih kecil dari threshold "Sangat Mirip".');
         }
 
-        $model = new ThresholdSettingModel();
-        $model->updateSettings([
+        $this->model->updateSettings([
             'cosine_weight'          => $cosineWeight,
             'jaccard_weight'         => $jaccardWeight,
             'similar_threshold'      => $similarThreshold,

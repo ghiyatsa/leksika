@@ -35,6 +35,12 @@ if (! function_exists('similarity_category_badge')) {
     }
 }
 
+if (! function_exists('isActive')) {
+    function isActive(string $path, string $current): string {
+        return str_starts_with($current, $path) ? 'active' : '';
+    }
+}
+
 if (! function_exists('similarity_history_url')) {
     /**
      * Returns the correct history URL based on user role.

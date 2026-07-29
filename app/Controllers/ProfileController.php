@@ -2,34 +2,36 @@
 
 namespace App\Controllers;
 
-use App\Libraries\FirebaseAuth;
 use App\Models\UserModel;
 
 class ProfileController extends BaseController
 {
+    private UserModel $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = model(UserModel::class);
+    }
+
     public function index(): string|\CodeIgniter\HTTP\RedirectResponse
     {
-        $userId    = session()->get('userId');
-        $userModel = new UserModel();
-        $user      = $userModel->find($userId);
+        $userId = session()->get('userId');
+        $user   = $this->userModel->find($userId);
 
         if ($user === null) {
             return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
         }
 
-        $data = [
+        return view('profile/index', [
             'title' => 'Profil Saya',
             'user'  => $user,
-        ];
-
-        return view('profile/index', $data);
+        ]);
     }
 
     public function update(): \CodeIgniter\HTTP\RedirectResponse
     {
-        $userId    = session()->get('userId');
-        $userModel = new UserModel();
-        $user      = $userModel->find($userId);
+        $userId = session()->get('userId');
+        $user   = $this->userModel->find($userId);
 
         if ($user === null) {
             return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
@@ -59,13 +61,13 @@ class ProfileController extends BaseController
             $updateData['password'] = password_hash($password, PASSWORD_BCRYPT);
         }
 
+        $firebase = service('firebaseAuth');
+
         if (!empty($password) && $user['firebase_uid']) {
-            $firebase = new FirebaseAuth();
             $firebase->updateUserPassword($user['firebase_uid'], $password);
         }
 
         if ($email !== $user['email'] && $user['firebase_uid']) {
-            $firebase ??= new FirebaseAuth();
             $firebase->updateUserEmail($user['firebase_uid'], $email);
         }
 
@@ -83,9 +85,9 @@ class ProfileController extends BaseController
             $updateData['avatar'] = $newName;
         }
 
-        $userModel->update($userId, $updateData);
+        $this->userModel->update($userId, $updateData);
 
-        $user = $userModel->find($userId);
+        $user = $this->userModel->find($userId);
 
         session()->set([
             'userName'         => $name,
@@ -99,9 +101,8 @@ class ProfileController extends BaseController
 
     public function deleteAvatar(): \CodeIgniter\HTTP\RedirectResponse
     {
-        $userId    = session()->get('userId');
-        $userModel = new UserModel();
-        $user      = $userModel->find($userId);
+        $userId = session()->get('userId');
+        $user   = $this->userModel->find($userId);
 
         if ($user === null) {
             return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
@@ -114,7 +115,7 @@ class ProfileController extends BaseController
             }
         }
 
-        $userModel->update($userId, ['avatar' => null]);
+        $this->userModel->update($userId, ['avatar' => null]);
 
         session()->set('userAvatar', null);
 
@@ -123,9 +124,8 @@ class ProfileController extends BaseController
 
     public function deleteAccount(): \CodeIgniter\HTTP\RedirectResponse
     {
-        $userId    = session()->get('userId');
-        $userModel = new UserModel();
-        $user      = $userModel->find($userId);
+        $userId = session()->get('userId');
+        $user   = $this->userModel->find($userId);
 
         if ($user === null) {
             return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
@@ -139,11 +139,11 @@ class ProfileController extends BaseController
         }
 
         if ($user['firebase_uid']) {
-            $firebase = new FirebaseAuth();
+            $firebase = service('firebaseAuth');
             $firebase->deleteUser($user['firebase_uid']);
         }
 
-        $userModel->delete($userId);
+        $this->userModel->delete($userId);
         session()->destroy();
 
         return redirect()->to(base_url('/'))->with('success', 'Akun Anda berhasil dihapus.');

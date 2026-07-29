@@ -2,7 +2,9 @@
 
 namespace Config;
 
-class Firebase
+use CodeIgniter\Config\BaseConfig;
+
+class Firebase extends BaseConfig
 {
     public string $projectId;
     public string $apiKey;

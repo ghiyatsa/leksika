@@ -15,25 +15,31 @@ class ThresholdSettingModel extends Model
     protected $allowedFields    = ['cosine_weight', 'jaccard_weight', 'similar_threshold', 'review_threshold', 'max_similarity_results'];
     protected $useTimestamps    = false;
 
-    /**
-     * Always returns the first (and only) settings row.
-     */
     public function getSettings(): array
     {
         $row = $this->first();
         if ($row === null) {
-            // Insert defaults if missing
-            $defaults = [
-                'cosine_weight'          => 0.60,
-                'jaccard_weight'         => 0.40,
-                'similar_threshold'      => 0.75,
-                'review_threshold'       => 0.40,
-                'max_similarity_results' => 5,
-            ];
-            $this->insert($defaults);
-            return $defaults;
+            return $this->defaults();
         }
         return $row;
+    }
+
+    public function initDefaultSettings(): void
+    {
+        if ($this->first() === null) {
+            $this->insert($this->defaults());
+        }
+    }
+
+    private function defaults(): array
+    {
+        return [
+            'cosine_weight'          => 0.60,
+            'jaccard_weight'         => 0.40,
+            'similar_threshold'      => 0.75,
+            'review_threshold'       => 0.40,
+            'max_similarity_results' => 5,
+        ];
     }
 
     /**

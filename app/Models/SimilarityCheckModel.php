@@ -13,12 +13,10 @@ class SimilarityCheckModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = ['user_id', 'uuid', 'input_title', 'input_keyword', 'checked_at'];
-    protected $useTimestamps    = false;
+    protected $useTimestamps    = true;
+    protected $createdField     = 'checked_at';
+    protected $updatedField     = '';
 
-    /**
-     * Get all checks joined with user data.
-     * If userId is provided, filter by that user.
-     */
     public function getHistory(?int $userId = null, string $dateFrom = '', string $dateTo = ''): array
     {
         $builder = $this->db->table('similarity_checks sc')
@@ -39,9 +37,6 @@ class SimilarityCheckModel extends Model
         return $builder->get()->getResultArray();
     }
 
-    /**
-     * Get a single check header with user info.
-     */
     public function getCheckWithUser(int $checkId): array|null
     {
         return $this->db->table('similarity_checks sc')
@@ -52,9 +47,6 @@ class SimilarityCheckModel extends Model
             ->getRowArray();
     }
 
-    /**
-     * Get a single check header by UUID with user info.
-     */
     public function getCheckByUuid(string $uuid): array|null
     {
         return $this->db->table('similarity_checks sc')
@@ -63,5 +55,16 @@ class SimilarityCheckModel extends Model
             ->where('sc.uuid', $uuid)
             ->get()
             ->getRowArray();
+    }
+
+    public function getRecentChecks(int $limit = 6): array
+    {
+        return $this->db->table('similarity_checks sc')
+            ->select('sc.id, sc.input_title, sc.checked_at, u.name AS user_name')
+            ->join('users u', 'u.id = sc.user_id')
+            ->orderBy('sc.checked_at', 'DESC')
+            ->limit($limit)
+            ->get()
+            ->getResultArray();
     }
 }

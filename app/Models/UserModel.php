@@ -32,4 +32,29 @@ class UserModel extends Model
     {
         return $this->where('firebase_uid', $uid)->first();
     }
+
+    public function getPaginatedUsers(string $search = '', int $perPage = 10, int $page = 1): array
+    {
+        $builder = $this->db->table('users')
+            ->orderBy('name', 'ASC');
+
+        if ($search !== '') {
+            $builder->groupStart()
+                ->like('name', $search)
+                ->orLike('email', $search)
+                ->groupEnd();
+        }
+
+        $total   = $builder->countAllResults(false);
+        $page    = max(1, $page);
+        $offset  = ($page - 1) * $perPage;
+        $results = $builder->limit($perPage, $offset)->get()->getResultArray();
+
+        return [
+            'data'    => $results,
+            'total'   => $total,
+            'perPage' => $perPage,
+            'page'    => $page,
+        ];
+    }
 }

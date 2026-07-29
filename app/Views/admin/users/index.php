@@ -10,11 +10,11 @@
 
 <div class="card">
     <div class="card-header">
-        <div class="card-subtitle">Total <?= count($users) ?> pengguna terdaftar</div>
+        <div class="card-subtitle">Total <?= $result['total'] ?> pengguna terdaftar</div>
         <a href="<?= base_url('admin/users/create') ?>" class="btn btn-primary"><?= render_icon('plus', ['style' => 'width: 16px; height: 16px; margin-right: 4px;']) ?> <span class="btn-text">Tambah</span></a>
     </div>
 
-    <?php if (empty($users)): ?>
+    <?php if (empty($result['data'])): ?>
         <div class="empty-state">
             <div class="empty-icon"><?= render_icon('users', ['style' => 'width: 48px; height: 48px; stroke: var(--text-faint);']) ?></div>
             <p>Belum ada pengguna.</p>
@@ -27,9 +27,9 @@
                     <tr><th scope="col">#</th><th scope="col">Nama</th><th scope="col">Email</th><th scope="col">Role</th><th scope="col">Bergabung</th><th scope="col">Aksi</th></tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($users as $i => $user): ?>
+                    <?php foreach ($result['data'] as $i => $user): ?>
                         <tr>
-                            <td class="text-mono text-muted text-sm"><?= $i + 1 ?></td>
+                            <td class="text-mono text-muted text-sm"><?= (($result['page'] - 1) * $result['perPage']) + $i + 1 ?></td>
                             <td>
                                 <div class="d-flex align-center gap-2" style="align-items: center;">
                                     <div class="avatar avatar-sm" style="font-size: 11px;"><?= strtoupper(substr($user['name'], 0, 1)) ?></div>
@@ -62,7 +62,14 @@
                 </tbody>
             </table>
         </div>
+        <?php if ($result['total'] > $result['perPage']): ?>
+            <div class="pagination">
+                <?php $totalPages = (int) ceil($result['total'] / $result['perPage']); ?>
+                <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                    <a href="<?= base_url('admin/users?page=' . $p . (!empty($search) ? '&search=' . urlencode($search) : '')) ?>" class="btn btn-sm <?= $p === $result['page'] ? 'btn-primary' : 'btn-secondary' ?>"><?= $p ?></a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
-
 <?= $this->endSection() ?>

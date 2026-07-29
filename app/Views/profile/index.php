@@ -17,7 +17,7 @@
             <div class="avatar-preview-container">
                 <div class="avatar-circle-lg" id="avatar-preview-container">
                     <?php $avatarSrc = get_avatar_src($user); if ($avatarSrc): ?>
-                        <img src="<?= $avatarSrc ?>" alt="Foto profil <?= esc($user['name']) ?>" referrerpolicy="no-referrer">
+                        <img src="<?= esc($avatarSrc, 'attr') ?>" alt="Foto profil <?= esc($user['name']) ?>" referrerpolicy="no-referrer">
                     <?php else: ?>
                         <?= strtoupper(substr($user['name'] ?? 'U', 0, 1)) ?>
                     <?php endif; ?>

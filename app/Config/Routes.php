@@ -7,10 +7,9 @@ use CodeIgniter\Router\RouteCollection;
 // ── Public Routes ─────────────────────────────────────────────────────────────
 $routes->get('/', 'Home::index');
 $routes->get('login', 'AuthController::login');
-$routes->post('login', 'AuthController::loginPost');
 $routes->get('register', 'AuthController::register');
 $routes->post('auth/firebaseLogin', 'AuthController::firebaseLogin');
-$routes->get('logout', 'AuthController::logout');
+$routes->post('logout', 'AuthController::logout');
 
 // ── Protected Routes (require login) ──────────────────────────────────────────
 $routes->group('', ['filter' => 'auth'], static function (RouteCollection $routes): void {
@@ -25,7 +24,7 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
     $routes->get('similarity', 'SimilarityController::index');
     $routes->post('similarity/check', 'SimilarityController::check');
     $routes->get('similarity/history', 'SimilarityController::history');
-    $routes->get('similarity/(:any)', 'SimilarityController::result/$1');
+    $routes->get('similarity/(:segment)', 'SimilarityController::result/$1');
 
     // ── Admin-only Routes ──────────────────────────────────────────────────
     $routes->group('admin', ['filter' => 'admin'], static function (RouteCollection $routes): void {

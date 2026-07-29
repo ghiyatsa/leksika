@@ -11,7 +11,7 @@ class StudentController extends BaseController
 
     public function __construct()
     {
-        $this->model = new StudentModel();
+        $this->model = model(StudentModel::class);
     }
 
     public function index(): string

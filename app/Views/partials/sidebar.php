@@ -4,11 +4,6 @@ $currentUri  = uri_string();
 $currentUri  = '/' . ltrim($currentUri, '/');
 $userName    = session()->get('userName') ?? 'U';
 
-if (!function_exists('isActive')) {
-    function isActive(string $path, string $current): string {
-        return str_starts_with($current, $path) ? 'active' : '';
-    }
-}
 ?>
 <aside class="sidebar">
     <div class="sidebar-logo">
@@ -67,7 +62,7 @@ if (!function_exists('isActive')) {
         <a href="<?= base_url('profile') ?>" class="sidebar-user">
             <div class="avatar">
                 <?php if ($avatarSrc): ?>
-                    <img src="<?= $avatarSrc ?>" alt="Foto profil <?= esc($userName) ?>" referrerpolicy="no-referrer">
+                    <img src="<?= esc($avatarSrc, 'attr') ?>" alt="Foto profil <?= esc($userName) ?>" referrerpolicy="no-referrer">
                 <?php else: ?>
                     <?= strtoupper(substr($userName, 0, 1)) ?>
                 <?php endif; ?>
@@ -77,8 +72,11 @@ if (!function_exists('isActive')) {
                 <div class="sidebar-user-role"><?= esc($role) ?></div>
             </div>
         </a>
-        <a href="<?= base_url('logout') ?>" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <?= render_icon('log-out', ['style' => 'width: 14px; height: 14px; stroke: currentColor;']) ?> Logout
-        </a>
+        <form method="POST" action="<?= base_url('logout') ?>" style="width: 100%;">
+            <?= csrf_field() ?>
+            <button type="submit" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                <?= render_icon('log-out', ['style' => 'width: 14px; height: 14px; stroke: currentColor;']) ?> Logout
+            </button>
+        </form>
     </div>
 </aside>

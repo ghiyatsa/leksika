@@ -15,10 +15,6 @@ class SimilarityCheckDetailModel extends Model
     protected $allowedFields    = ['check_id', 'thesis_title_id', 'cosine_score', 'jaccard_score', 'hybrid_score', 'result_category'];
     protected $useTimestamps    = false;
 
-    /**
-     * Get all details for a check, joined with thesis title and student data.
-     * Ordered by hybrid_score descending.
-     */
     public function getDetailsByCheckId(int $checkId): array
     {
         return $this->db->table('similarity_check_details scd')
@@ -33,4 +29,12 @@ class SimilarityCheckDetailModel extends Model
             ->getResultArray();
     }
 
+    public function getCategoryStats(): array
+    {
+        return $this->db->table('similarity_check_details scd')
+            ->select('AVG(scd.hybrid_score) AS avg_hybrid, scd.result_category, COUNT(*) AS count')
+            ->groupBy('scd.result_category')
+            ->get()
+            ->getResultArray();
+    }
 }
