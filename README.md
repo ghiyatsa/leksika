@@ -80,51 +80,28 @@ Dimana $t_r$ adalah _review threshold_ (default 0,40) dan $t_s$ adalah _similar 
 
 ## Arsitektur Sistem
 
-```
-Masukan (Judul + Kata Kunci)
-             │
-             ▼
-┌──────────────────────────┐
-│   TextPreprocessor       │
-│   • Case folding         │
-│   • Cleansing            │
-│   • Stopword removal     │
-│   • Stemming             │
-│   • Tokenisasi           │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│   SimilarityCalculator   │
-│                          │
-│   ┌──────────────────┐   │
-│   │  TF-IDF Vectors  │   │
-│   │  (seluruh korpus)│   │
-│   └────────┬─────────┘   │
-│            │             │
-│   ┌────────▼─────────┐   │
-│   │ Cosine Similarity│   │
-│   └────────┬─────────┘   │
-│            │             │
-│   ┌────────▼─────────┐   │
-│   │Jaccard Similarity│   │
-│   └────────┬─────────┘   │
-│            │             │
-│   ┌────────▼─────────┐   │
-│   │ Hybrid Score     │   │
-│   │ w1×Cosine +      │   │
-│   │ w2×Jaccard       │   │
-│   └────────┬─────────┘   │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│   Peringkat & Klasifikasi│
-│   Top-5 hasil dengan     │
-│   kategori: Aman /       │
-│   Perlu Ditinjau /       │
-│   Sangat Mirip           │
-└──────────────────────────┘
+```mermaid
+flowchart TD
+    A[Masukan: Judul + Kata Kunci] --> B[TextPreprocessor]
+    B --> C[Case folding]
+    C --> D[Cleansing]
+    D --> E[Stopword removal]
+    E --> F[Stemming]
+    F --> G[Tokenisasi]
+    G --> H[SimilarityCalculator]
+
+    subgraph H[SimilarityCalculator]
+        direction TB
+        H1[TF-IDF Vectors<br/>seluruh korpus] --> H2[Cosine Similarity]
+        H2 --> H3[Jaccard Similarity]
+        H3 --> H4[Hybrid Score<br/>w1 × Cosine + w2 × Jaccard]
+    end
+
+    H4 --> I[Peringkat & Klasifikasi]
+    I --> J[Top-5 hasil]
+    J --> K1[Aman]
+    J --> K2[Perlu Ditinjau]
+    J --> K3[Sangat Mirip]
 ```
 
 ## Dataset
@@ -153,12 +130,65 @@ Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahas
 
 ## Struktur Database
 
-```
-users ──1:N── similarity_checks ──1:N── similarity_check_details ──N:1── thesis
-                                                                           │
-                                                           students ──1:1──┘
-                                                                           │
-                                                   topic_categories ──1:N──┘
+```mermaid
+erDiagram
+    users ||--o{ similarity_checks : melakukan
+    similarity_checks ||--o{ similarity_check_details : memiliki
+    similarity_check_details }o--|| thesis : merujuk
+    thesis ||--|| students : dimiliki
+    thesis }o--|| topic_categories : dikategorikan
+
+    users {
+        int id PK
+        varchar name
+        varchar email UK
+        varchar password
+        enum role
+        varchar firebase_uid UK
+        varchar avatar
+        varchar google_avatar
+    }
+
+    topic_categories {
+        int id PK
+        varchar category_name
+        text description
+    }
+
+    students {
+        int id PK
+        varchar student_id UK
+        varchar name
+    }
+
+    thesis {
+        int id PK
+        int student_id FK
+        int category_id FK
+        varchar title
+        varchar keyword
+        longtext abstract
+        year year
+        text preprocessed_text
+    }
+
+    similarity_checks {
+        int id PK
+        int user_id FK
+        varchar uuid UK
+        varchar input_title
+        datetime checked_at
+    }
+
+    similarity_check_details {
+        int id PK
+        int check_id FK
+        int thesis_id FK
+        decimal cosine_score
+        decimal jaccard_score
+        decimal hybrid_score
+        varchar result_category
+    }
 ```
 
 ## Lisensi
