@@ -68,18 +68,6 @@
                 <div class="form-hint" style="margin-top:4px;">Email tidak dapat diubah. Hubungi admin jika perlu perubahan.</div>
             </div>
 
-            <div class="form-group">
-                <label for="password" class="form-label">Kata Sandi Baru</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Kosongkan jika tidak ingin mengubah kata sandi"
-                >
-                <div class="form-hint">Minimal 6 karakter.</div>
-            </div>
-
             <div style="display: flex; gap: 10px; margin-top: 16px;">
                 <button type="submit" class="btn btn-primary btn-lg">
                     <?= render_icon('save') ?> Simpan Perubahan
