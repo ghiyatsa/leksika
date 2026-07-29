@@ -1434,7 +1434,7 @@ tbody td {
 /* Mobile nav toggle */
 /* Hero Section */
 .hero-section {
-    padding-top: 140px;
+    padding-top: 60px;
     padding-bottom: 80px;
     min-height: auto;
     display: flex;
@@ -1855,7 +1855,7 @@ tbody td {
     }
 
     .hero-section {
-        padding-top: 100px;
+        padding-top: 40px;
         padding-bottom: 48px;
     }
 
