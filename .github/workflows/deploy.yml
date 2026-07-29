@@ -19,4 +19,6 @@ jobs:
             cd /home/admin/web/leksika.ghiyatsa.web.id/public_html
             sudo -u admin git pull origin master
             sudo -u admin /usr/bin/composer install --no-dev --no-interaction
+            npx --yes lightningcss-cli --minify public/css/style.css -o public/css/style.min.css
+            npx --yes terser public/js/app.js -o public/js/app.min.js --compress --mangle
             sudo systemctl restart frankenphp-ci4.service

@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= filemtime(FCPATH . 'css/style.css') ?>">
+<?php $cssSfx = ENVIRONMENT === 'production' ? '.min' : ''; ?>
+    <link rel="stylesheet" href="<?= base_url('css/style' . $cssSfx . '.css') ?>?v=<?= filemtime(FCPATH . 'css/style' . $cssSfx . '.css') ?>">
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'light';

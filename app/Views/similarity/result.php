@@ -76,15 +76,15 @@ $jaccardPct = (float)$threshold['jaccard_weight'] * 100;
 ?>
 <div class="animate-fade-in" style="animation-delay: 0.12s; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 16px 20px; background: var(--bg-surface); border: 1.5px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: 24px;">
     <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="badge" style="background: var(--success); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Aman</span>
+        <span class="badge" style="background: var(--badge-safe-fill); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Aman</span>
         <span style="font-size: 13px; font-weight: 500;">&lt; <?= $reviewPct ?>%</span>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="badge" style="background: var(--warning); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Perlu Ditinjau</span>
+        <span class="badge" style="background: var(--badge-warn-fill); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Perlu Ditinjau</span>
         <span style="font-size: 13px; font-weight: 500;"><?= $reviewPct ?>%–<?= $similarPct - 1 ?>%</span>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="badge" style="background: var(--danger); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Sangat Mirip</span>
+        <span class="badge" style="background: var(--badge-danger-fill); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.3px;">Sangat Mirip</span>
         <span style="font-size: 13px; font-weight: 500;">&ge; <?= $similarPct ?>%</span>
     </div>
     <div style="display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 12.5px; color: var(--text-muted);">

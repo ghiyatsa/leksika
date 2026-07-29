@@ -3,15 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-            document.documentElement.classList.add('no-transitions');
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            window.getComputedStyle(document.documentElement).opacity;
-            setTimeout(() => {
-                document.documentElement.classList.remove('no-transitions');
-            }, 0);
         });
     }
 

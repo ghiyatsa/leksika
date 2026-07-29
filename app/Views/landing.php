@@ -11,11 +11,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= filemtime(FCPATH . 'css/style.css') ?>">
+<?php $cssSfx = ENVIRONMENT === 'production' ? '.min' : ''; ?>
+    <link rel="stylesheet" href="<?= base_url('css/style' . $cssSfx . '.css') ?>?v=<?= filemtime(FCPATH . 'css/style' . $cssSfx . '.css') ?>">
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.classList.remove('preload');
         })();
     </script>
 </head>
@@ -25,8 +27,9 @@
 
 <?= $this->include('partials/landing_header', ['isLoggedIn' => $isLoggedIn]) ?>
 
+<main id="main-content">
 <!-- Hero Section -->
-<header class="hero-section" id="main-content">
+<header class="hero-section">
     <div class="hero-card-banner">
         <div class="hero-content">
             <h1 class="hero-title">Uji orisinalitas judul skripsi secara <em>instan</em>.</h1>
@@ -96,14 +99,14 @@
                 </p>
             </div>
             <div class="method-card">
-                <div style="margin-bottom: 12px;"><span class="badge badge-success" style="background: var(--success-bg); color: var(--success);">Semantik</span></div>
+                <div style="margin-bottom: 12px;"><span class="badge badge-success">Semantik</span></div>
                 <h3 class="method-title">Cosine Similarity</h3>
                 <p class="method-desc">
                     Mengukur kemiripan arah kosinus antar vektor representasi kata. Memberikan bobot <strong>60%</strong> pada skor akhir karena kemampuannya mendeteksi kemiripan semantik.
                 </p>
             </div>
             <div class="method-card">
-                <div style="margin-bottom: 12px;"><span class="badge badge-warning" style="background: var(--warning-bg); color: var(--warning);">Leksikal</span></div>
+                <div style="margin-bottom: 12px;"><span class="badge badge-warning">Leksikal</span></div>
                 <h3 class="method-title">Jaccard Similarity</h3>
                 <p class="method-desc">
                     Menghitung irisan set kata yang digunakan dalam dua judul. Memberikan bobot <strong>40%</strong> untuk menangkap kemiripan persis dari kata-kata yang diajukan.
@@ -130,6 +133,8 @@
         </div>
     </div>
 </section>
+
+</main>
 
 <!-- Footer -->
 <footer class="landing-footer">
