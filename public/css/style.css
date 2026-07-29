@@ -2470,9 +2470,9 @@ tbody td {
     color: var(--text-muted);
 }
 [data-theme="light"] .sim-input { color: var(--text-primary); }
-[data-theme="light"] .sim-process { color: var(--accent); }
+[data-theme="light"] .sim-process { color: oklch(44% 0.14 280); }
 [data-theme="light"] .sim-subtext { color: var(--text-muted); }
-[data-theme="light"] .sim-calc { color: oklch(62% 0.16 150); }
+[data-theme="light"] .sim-calc { color: oklch(45% 0.16 150); }
 [data-theme="light"] .simulator-dots .dot.red { background: oklch(62% 0.20 28); }
 [data-theme="light"] .simulator-dots .dot.yellow { background: oklch(72% 0.15 70); }
 [data-theme="light"] .simulator-dots .dot.green { background: oklch(62% 0.16 150); }
@@ -2543,15 +2543,15 @@ tbody td {
     color: var(--text-muted);
 }
 [data-theme="light"] .sim-line.sim-success {
-    color: oklch(50% 0.18 150);
+    color: oklch(42% 0.18 150);
 }
 [data-theme="light"] .sim-line.sim-success::before {
-    background: oklch(50% 0.18 150);
+    background: oklch(42% 0.18 150);
 }
 [data-theme="light"] .sim-line.sim-verdict-high {
-    color: oklch(50% 0.22 28);
+    color: oklch(44% 0.22 28);
     background: oklch(62% 0.20 28 / 0.10);
-    border-left-color: oklch(50% 0.22 28);
+    border-left-color: oklch(44% 0.22 28);
 }
 [data-theme="light"] .sim-line.sim-verdict-med {
     color: oklch(45% 0.20 75);
