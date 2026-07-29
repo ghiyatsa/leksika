@@ -132,3 +132,6 @@ _modules/*
 
 # User uploaded avatars
 /public/uploads/avatars/*
+
+# Deploy scripts (local only)
+deploy.ps1

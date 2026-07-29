@@ -1,0 +1,18 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute deploy script via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 54.255.48.119
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo /home/admin/deploy-leksika.sh
