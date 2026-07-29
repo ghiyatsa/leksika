@@ -203,15 +203,27 @@ document.addEventListener('DOMContentLoaded', () => {
         simBody.setAttribute('aria-live', 'polite');
 
         const sampleTitles = [
-            "Implementasi Cosine Similarity Untuk Deteksi Plagiarisme",
-            "Analisis Sentimen Ulasan Kuliner dengan Naive Bayes",
-            "Penerapan Algoritma K-Means Untuk Pengelompokan Data"
+            "Klasifikasi Sentimen Ulasan Online Shop Menggunakan Naive Bayes",
+            "Sistem Pemetaan Hasil Pertanian Menggunakan Algoritma K-Means",
+            "Perancangan Sistem Pendataan Kehadiran Mahasiswa"
         ];
 
         const scenarios = [
-            { cosine: 64.5, jaccard: 50.2, hybrid: 58.78, verdict: 'Tinggi — Perlu Revisi', cls: 'sim-verdict-high' },
-            { cosine: 38.2, jaccard: 22.7, hybrid: 31.97, verdict: 'Sedang — Perlu Cek Manual', cls: 'sim-verdict-med' },
-            { cosine: 12.3, jaccard: 5.1, hybrid: 9.42, verdict: 'Sangat Rendah — Lolos', cls: 'sim-verdict-low' },
+            {
+                cosine: 72.4, jaccard: 53.8, hybrid: 64.96,
+                match: "Klasifikasi Sentimen Konsumen Online Shop Instagram Dengan Menggunakan Algoritma Naive Bayes Classifier",
+                verdict: 'Tinggi — Perlu Revisi', cls: 'sim-verdict-high'
+            },
+            {
+                cosine: 48.5, jaccard: 37.5, hybrid: 44.10,
+                match: "Sistem Pemetaan Hasil Pertanian Kabupaten Bireuen Menggunakan Metode K-Means Clustering",
+                verdict: 'Sedang — Perlu Cek Manual', cls: 'sim-verdict-med'
+            },
+            {
+                cosine: 15.2, jaccard: 11.1, hybrid: 13.56,
+                match: "Sistem Pendataan Kehadiran Mahasiswa Menggunakan Kamera Berbasis Website",
+                verdict: 'Sangat Rendah — Lolos', cls: 'sim-verdict-low'
+            },
         ];
 
         let currentIdx = 0;
@@ -304,6 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 await showProgress('TF-IDF Vectorization', 1200);
                 await showProgress('Cosine & Jaccard Similarity', 1000);
 
+                await sleep(200);
+                addLine(`  ↳ Terdekat: "${sc.match}"`, 'sim-subtext');
                 await sleep(200);
                 addLine(`  ↳ Cosine Similarity: ${sc.cosine}%`, 'sim-calc');
                 await sleep(150);
