@@ -2458,7 +2458,65 @@ tbody td {
 [data-theme="light"] .simulator-dots .dot.yellow { background: oklch(72% 0.15 70); }
 [data-theme="light"] .simulator-dots .dot.green { background: oklch(62% 0.16 150); }
 
-/* Mobile nav overlay */
+/* ── Terminal Simulator v2 — Enhanced Animations ────────────────── */
+.sim-typing::after {
+    content: '▋';
+    animation: simCursorBlink 0.8s step-end infinite;
+    margin-left: 1px;
+}
+@keyframes simCursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.sim-line.sim-info {
+    color: oklch(58% 0.02 250);
+    font-style: italic;
+}
+.sim-line.sim-success {
+    color: oklch(62% 0.16 150);
+}
+.sim-line.sim-success::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: oklch(62% 0.16 150);
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: simPulse 1.5s ease-in-out infinite;
+}
+@keyframes simPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.sim-line.sim-verdict-med {
+    color: oklch(72% 0.18 75);
+    font-weight: 700;
+    background: oklch(72% 0.18 75 / 0.12);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid oklch(72% 0.18 75);
+    margin-top: 4px;
+}
+
+[data-theme="light"] .sim-line.sim-info {
+    color: var(--text-muted);
+}
+[data-theme="light"] .sim-line.sim-success {
+    color: oklch(50% 0.18 150);
+}
+[data-theme="light"] .sim-line.sim-success::before {
+    background: oklch(50% 0.18 150);
+}
+[data-theme="light"] .sim-line.sim-verdict-med {
+    color: oklch(45% 0.20 75);
+    background: oklch(72% 0.18 75 / 0.10);
+    border-left-color: oklch(45% 0.20 75);
+}
+
 /* ── User Avatar Dropdown ────────────────────────────────────────── */
 .user-dropdown {
     position: relative;

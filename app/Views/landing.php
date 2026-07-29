@@ -197,50 +197,127 @@ document.addEventListener('DOMContentLoaded', () => {
     const cmdInput = document.getElementById('cmd-input');
     const cmdOpenBtn = document.getElementById('cmd-open-btn');
 
-    // Simulator logic
+    // ── Terminal Simulator (leksika-engine v2.0) ─────────────────────
     const simBody = document.getElementById('sim-body');
-    simBody.setAttribute('aria-live', 'polite');
     if (simBody) {
+        simBody.setAttribute('aria-live', 'polite');
+
         const sampleTitles = [
             "Sistem Informasi Pendataan Skripsi Berbasis Web",
             "Analisis Sentimen Ulasan Kuliner dengan Naive Bayes",
             "Penerapan Algoritma K-Means Untuk Pengelompokan Data"
         ];
-        let currentTitleIdx = 0;
 
-        function runSimulation() {
-            simBody.innerHTML = '';
-            const title = sampleTitles[currentTitleIdx];
-            
-            const logLines = [
-                { text: `> Input: "${title}"`, delay: 0, class: 'sim-input' },
-                { text: `> Preprocessing: [case_folding, filtering, stemming]`, delay: 1200, class: 'sim-process' },
-                { text: `  ↳ Hasil: "${title.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(' ').slice(0, 4).join(' ')}..."`, delay: 1800, class: 'sim-subtext' },
-                { text: `> Vektorisasi TF-IDF & Cosine Similarity...`, delay: 2800, class: 'sim-process' },
-                { text: `  ↳ Cosine: 64.5% | Jaccard: 50.2%`, delay: 3800, class: 'sim-calc' },
-                { text: `[HASIL] Kemiripan: 58.78% (Tinggi — Perlu Revisi)`, delay: 4800, class: 'sim-result-high' }
-            ];
+        const scenarios = [
+            { cosine: 64.5, jaccard: 50.2, hybrid: 58.78, verdict: 'Tinggi — Perlu Revisi', cls: 'sim-verdict-high' },
+            { cosine: 38.2, jaccard: 22.7, hybrid: 31.97, verdict: 'Sedang — Perlu Cek Manual', cls: 'sim-verdict-med' },
+            { cosine: 12.3, jaccard: 5.1, hybrid: 9.42, verdict: 'Sangat Rendah — Lolos', cls: 'sim-verdict-low' },
+        ];
 
-            if (currentTitleIdx === 1) {
-                logLines[4].text = `  ↳ Cosine: 12.3% | Jaccard: 5.1%`;
-                logLines[5].text = `[HASIL] Kemiripan: 9.42% (Sangat Rendah — Lolos)`;
-                logLines[5].class = 'sim-result-low';
-            }
+        let currentIdx = 0;
+        let activeTimers = [];
 
-            currentTitleIdx = (currentTitleIdx + 1) % sampleTitles.length;
+        const sleep = (ms) => new Promise(r => {
+            const t = setTimeout(r, ms);
+            activeTimers.push(t);
+        });
 
-            logLines.forEach(line => {
-                setTimeout(() => {
-                    const p = document.createElement('p');
-                    p.className = `sim-line ${line.class || ''}`;
-                    p.textContent = line.text;
-                    simBody.appendChild(p);
+        const addLine = (text, className = '') => {
+            const p = document.createElement('p');
+            p.className = `sim-line ${className}`;
+            p.textContent = text;
+            simBody.appendChild(p);
+            simBody.scrollTop = simBody.scrollHeight;
+            return p;
+        };
+
+        const typeText = (el, text, speed = 30) => new Promise(resolve => {
+            el.textContent = '';
+            el.classList.add('sim-typing');
+            let i = 0;
+            const fn = () => {
+                if (i < text.length) {
+                    el.textContent = text.slice(0, i + 1);
+                    i++;
+                    const t = setTimeout(fn, speed);
+                    activeTimers.push(t);
                     simBody.scrollTop = simBody.scrollHeight;
-                }, line.delay);
-            });
+                } else {
+                    el.classList.remove('sim-typing');
+                    resolve();
+                }
+            };
+            fn();
+        });
 
-            setTimeout(runSimulation, 8000);
+        const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+
+        const showSpinner = async (label, duration = 1000) => {
+            const p = addLine('', 'sim-process');
+            let frame = 0;
+            const interval = setInterval(() => {
+                p.textContent = `${spinnerFrames[frame % spinnerFrames.length]} ${label}`;
+                frame++;
+            }, 70);
+            await sleep(duration);
+            clearInterval(interval);
+            p.textContent = `✓ ${label}`;
+            p.className = 'sim-line sim-success';
+        };
+
+        const showProgress = async (label, duration = 1400) => {
+            const p = addLine('', 'sim-process');
+            const steps = 18;
+            for (let i = 1; i <= steps; i++) {
+                const filled = '█'.repeat(i);
+                const empty = '░'.repeat(steps - i);
+                const pct = Math.round((i / steps) * 100);
+                p.textContent = `${label} [${filled}${empty}] ${pct}%`;
+                await sleep(duration / steps);
+            }
+            p.textContent = `✓ ${label}`;
+            p.className = 'sim-line sim-success';
+        };
+
+        async function runSimulation() {
+            addLine('leksika-engine v2.0 — Hybrid Similarity Engine', 'sim-info');
+            await sleep(500);
+            addLine('Initializing NLP pipeline...', 'sim-info');
+            await sleep(400);
+            addLine('Loading corpus (4.827 judul skripsi)...', 'sim-info');
+            await sleep(800);
+
+            while (true) {
+                const title = sampleTitles[currentIdx % sampleTitles.length];
+                const sc = scenarios[currentIdx % scenarios.length];
+                currentIdx++;
+
+                simBody.innerHTML = '';
+
+                const inputLine = addLine('', 'sim-input');
+                await typeText(inputLine, `$ leksika "${title}"`, 25);
+
+                await showSpinner('case_folding — Case Folding...', 700);
+                await showSpinner('filtering — Filtering Stopwords...', 600);
+                await showSpinner('stemming — Stemming (Sastrawi)...', 800);
+
+                await showProgress('TF-IDF Vectorization', 1200);
+                await showProgress('Cosine & Jaccard Similarity', 1000);
+
+                await sleep(200);
+                addLine(`  ↳ Cosine Similarity: ${sc.cosine}%`, 'sim-calc');
+                await sleep(150);
+                addLine(`  ↳ Jaccard Similarity: ${sc.jaccard}%`, 'sim-calc');
+                await sleep(150);
+                addLine(`  ↳ Hybrid Score: ${sc.hybrid}%`, 'sim-calc');
+                await sleep(300);
+
+                addLine(`[ HASIL ] ${sc.verdict}`, sc.cls);
+
+                await sleep(4000);
+            }
         }
+
         runSimulation();
     }
 
