@@ -4,8 +4,10 @@ $currentUri  = uri_string();
 $currentUri  = '/' . ltrim($currentUri, '/');
 $userName    = session()->get('userName') ?? 'U';
 
-function isActive(string $path, string $current): string {
-    return str_starts_with($current, $path) ? 'active' : '';
+if (!function_exists('isActive')) {
+    function isActive(string $path, string $current): string {
+        return str_starts_with($current, $path) ? 'active' : '';
+    }
 }
 ?>
 <aside class="sidebar">
