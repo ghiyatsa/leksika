@@ -2462,7 +2462,8 @@ tbody td {
 /* ── User Avatar Dropdown ────────────────────────────────────────── */
 .user-dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
 }
 
 .avatar-btn {
