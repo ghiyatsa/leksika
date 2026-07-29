@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 
 abstract class BaseController extends Controller
 {
-    protected function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger): void
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger): void
     {
         $this->helpers = ['url', 'form', 'icon', 'avatar', 'similarity', 'uuid'];
 
