@@ -3,12 +3,15 @@
 namespace App\Database\Seeds;
 
 use App\Libraries\FirebaseAuth;
+use App\Libraries\SimilarityCalculator;
+use App\Libraries\TextPreprocessor;
 use CodeIgniter\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        ini_set('memory_limit', '-1');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
 
         // ── 1. USERS ──────────────────────────────────────────────────
@@ -18,7 +21,9 @@ class DatabaseSeeder extends Seeder
 
         $seedUsers = [
             ['name' => 'Administrator',  'email' => 'admin@leksika.com', 'password' => 'admin123', 'role' => 'admin'],
-            ['name' => 'Ahmad Fauzi',    'email' => 'user@leksika.com',  'password' => 'user123',  'role' => 'user'],
+            ['name' => 'User',           'email' => 'user@leksika.com',  'password' => 'user123',  'role' => 'user'],
+            ['name' => 'Demo User',      'email' => 'demo@leksika.com',  'password' => 'demo123',  'role' => 'user'],
+            ['name' => 'Mahasiswa A',    'email' => 'mahasisw1@leksika.com', 'password' => 'mhs123',   'role' => 'user'],
         ];
 
         foreach ($seedUsers as $u) {
@@ -28,7 +33,7 @@ class DatabaseSeeder extends Seeder
                 'email'        => $u['email'],
                 'password'     => password_hash($u['password'], PASSWORD_BCRYPT),
                 'role'         => $u['role'],
-                'firebase_uid' => $firebaseUid,
+                'firebase_uid' => $firebaseUid ?? ('seed_' . bin2hex(random_bytes(12))),
                 'created_at'   => date('Y-m-d H:i:s'),
                 'updated_at'   => date('Y-m-d H:i:s'),
             ]);
@@ -1032,18 +1037,21 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
             ['nim' => '210170103', 'category_id' => 2, 'title' => 'Mendeteksi Komentar Bot Pada Penjualan Sebuah Produk Di Shopee Dengan Metode Gradient Boosting', 'keyword' => 'Komentar bot, Shopee, Gradient Boosting, Klasifikasi Teks, E-commerce', 'abstract' => 'Shopee merupakan salah satu platform e-commerce terbesar di Asia Tenggara yang menyediakan fitur komentar produk sebagai referensi utama bagi calon pembeli dalam menilai kualitas produk maupun reputasi penjual. Sayangnya, banyaknya komentar palsu yang dihasilkan oleh bot dengan gaya bahasa yang kaku, berulang, dan penuh pujian berlebihan menimbulkan kekhawatiran terkait keaslian ulasan yang tersedia. Hal ini dapat memengaruhi keputusan konsumen secara tidak objektif. Penelitian ini bertujuan untuk mengembangkan sistem otomatis yang mampu mendeteksi komentar bot dengan memanfaatkan algoritma Gradient Boosting. Sebanyak 3.000 komentar dikumpulkan secara manual dari berbagai kategori produk, lalu diberi label secara langsung oleh peneliti. Selanjutnya, data komentar diproses melalui tahapan pembersihan teks, tokenisasi, dan lemmatisasi agar siap dianalisis oleh model. Hasil pelatihan model menunjukkan performa yang sangat baik dengan akurasi sebesar 94,09%, presisi 95,99%, recall 83,23%, dan F1-score 89,13%. Berdasarkan hasil tersebut, dapat disimpulkan bahwa algoritma Gradient Boosting sangat efektif dalam mengklasifikasikan komentar bot dan dapat membantu meningkatkan kepercayaan serta keamanan konsumen dalam berbelanja online.', 'year' => 2025],
         ];
 
+        $preprocessor = new TextPreprocessor();
         foreach ($thesisData as $th) {
             $studId = $nimToId[$th['nim']] ?? null;
             if (!$studId) continue;
+            $preprocessed = implode(' ', $preprocessor->preprocess($th['title'] . ' ' . $th['keyword']));
             $this->db->table('thesis')->insert([
-                'student_id'  => $studId,
-                'category_id' => $th['category_id'],
-                'title'       => $th['title'],
-                'keyword'     => $th['keyword'],
-                'abstract'    => $th['abstract'],
-                'year'        => $th['year'],
-                'created_at'  => date('Y-m-d H:i:s'),
-                'updated_at'  => date('Y-m-d H:i:s'),
+                'student_id'       => $studId,
+                'category_id'      => $th['category_id'],
+                'title'            => $th['title'],
+                'keyword'          => $th['keyword'],
+                'abstract'         => $th['abstract'],
+                'year'             => $th['year'],
+                'preprocessed_text' => $preprocessed,
+                'created_at'       => date('Y-m-d H:i:s'),
+                'updated_at'       => date('Y-m-d H:i:s'),
             ]);
         }
 
@@ -1055,6 +1063,96 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
             'review_threshold'       => 0.40,
             'max_similarity_results' => 5,
         ]);
+
+        // ── 6. SIMILARITY CHECKS (real computation) ──────────────────
+        $this->db->table('similarity_checks')->truncate();
+        $this->db->table('similarity_check_details')->truncate();
+
+        helper('uuid');
+
+        $thesisCollection = $this->db->table('thesis tt')
+            ->select('tt.id, tt.title, tt.keyword, tt.preprocessed_text, s.student_id AS nim, s.name AS student_name, tc.category_name, tt.year')
+            ->join('students s', 's.id = tt.student_id')
+            ->join('topic_categories tc', 'tc.id = tt.category_id')
+            ->get()
+            ->getResultArray();
+
+        $threshold = $this->db->table('threshold_settings')->get()->getRowArray();
+
+        $calculator   = new SimilarityCalculator();
+        $users        = $this->db->table('users')->where('role', 'user')->get()->getResultArray();
+
+        $seedChecks = [
+            [
+                'input_title'   => 'Sistem Deteksi Dini Penyakit Pencernaan Menggunakan Metode Certainty Factor Berbasis Web',
+                'input_keyword' => 'Sistem Pakar, Certainty Factor, Penyakit Pencernaan, Diagnosa',
+            ],
+            [
+                'input_title'   => 'Aplikasi Prediksi Harga Emas Menggunakan Algoritma Extreme Gradient Boosting',
+                'input_keyword' => 'XGBoost, Prediksi Harga, Emas, Machine Learning, Investasi',
+            ],
+            [
+                'input_title'   => 'Klasterisasi Hasil Produksi Tanaman Pangan Menggunakan Algoritma K-Medoids',
+                'input_keyword' => 'K-Medoids, Clustering, Hasil Produksi, Pertanian',
+            ],
+            [
+                'input_title'   => 'Sistem Informasi Geografis Pemetaan Lokasi Banjir di Kota Lhokseumawe Berbasis Web',
+                'input_keyword' => 'GIS, Pemetaan, Banjir, Haversine, Lhokseumawe',
+            ],
+            [
+                'input_title'   => 'Rekomendasi Pemilihan Lokasi Usaha UMKM Menggunakan Metode AHP dan TOPSIS',
+                'input_keyword' => 'AHP, TOPSIS, UMKM, Lokasi Usaha, DSS',
+            ],
+            [
+                'input_title'   => 'Penerapan Metode Least Square Untuk Memprediksi Stok Obat Pada Puskesmas',
+                'input_keyword' => 'Least Square, Prediksi, Stok Obat, Puskesmas',
+            ],
+            [
+                'input_title'   => 'Analisis Sentimen Terhadap Boikot Produk di Media Sosial Menggunakan LSTM',
+                'input_keyword' => 'Analisis Sentimen, LSTM, Media Sosial, Boikot, Deep Learning',
+            ],
+            [
+                'input_title'   => 'Sistem Smart Irigasi Untuk Tanaman Cabai Berbasis IoT Dengan Metode Fuzzy',
+                'input_keyword' => 'IoT, Smart Irigasi, Fuzzy, Tanaman Cabai, Monitoring',
+            ],
+        ];
+
+        foreach ($seedChecks as $i => $check) {
+            $results = $calculator->runCheck(
+                $check['input_title'],
+                $check['input_keyword'],
+                $thesisCollection,
+                $threshold,
+                $preprocessor
+            );
+
+            $maxResults = (int) ($threshold['max_similarity_results'] ?? 5);
+            $results    = array_slice($results, 0, $maxResults);
+
+            $uuid    = generate_uuid();
+            $userId  = $users[$i % count($users)]['id'];
+            $checked = date('Y-m-d H:i:s', strtotime('-' . (count($seedChecks) - $i) . ' days'));
+
+            $this->db->table('similarity_checks')->insert([
+                'user_id'     => $userId,
+                'uuid'        => $uuid,
+                'input_title' => $check['input_title'],
+                'checked_at'  => $checked,
+            ]);
+
+            $checkId = $this->db->insertID();
+
+            $details = array_map(fn($r) => [
+                'check_id'        => $checkId,
+                'thesis_id'       => $r['thesis_id'],
+                'cosine_score'    => $r['cosine_score'],
+                'jaccard_score'   => $r['jaccard_score'],
+                'hybrid_score'    => $r['hybrid_score'],
+                'result_category' => $r['result_category'],
+            ], $results);
+
+            $this->db->table('similarity_check_details')->insertBatch($details);
+        }
 
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
     }
