@@ -84,4 +84,35 @@ class AuthController extends BaseController
         session()->destroy();
         return redirect()->to(base_url('login'))->with('success', 'Anda telah berhasil logout.');
     }
+
+    public function forgotPassword(): \CodeIgniter\HTTP\ResponseInterface|string
+    {
+        if ($this->request->is('post')) {
+            $email = $this->request->getJsonVar('email');
+
+            if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Alamat email tidak valid.',
+                ]);
+            }
+
+            $firebase = service('firebaseAuth');
+            $sent     = $firebase->sendPasswordResetEmail($email);
+
+            if ($sent) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Tautan reset password telah dikirim ke email Anda. Periksa kotak masuk (atau folder spam).',
+                ]);
+            }
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Gagal mengirim email. Pastikan email terdaftar dan coba lagi.',
+            ]);
+        }
+
+        return view('auth/forgot_password');
+    }
 }

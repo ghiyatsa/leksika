@@ -16,7 +16,22 @@ class Firebase extends BaseConfig
         $this->projectId       = env('FIREBASE_PROJECT_ID', '');
         $this->apiKey          = env('FIREBASE_API_KEY', '');
         $this->authDomain      = env('FIREBASE_AUTH_DOMAIN', '');
-        $this->credentialsPath = ROOTPATH . env('FIREBASE_CREDENTIALS', 'firebase-credentials.json');
+        $this->credentialsPath = $this->resolveCredentialsPath();
+    }
+
+    private function resolveCredentialsPath(): string
+    {
+        $creds = env('FIREBASE_CREDENTIALS', 'firebase-credentials.json');
+
+        if ($creds === '') {
+            return '';
+        }
+
+        if (str_starts_with($creds, '/')) {
+            return $creds;
+        }
+
+        return ROOTPATH . $creds;
     }
 
 

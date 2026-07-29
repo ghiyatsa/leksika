@@ -8,6 +8,8 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('login', 'AuthController::login');
 $routes->get('register', 'AuthController::register');
+$routes->get('forgot-password', 'AuthController::forgotPassword');
+$routes->post('auth/forgot-password', 'AuthController::forgotPassword');
 $routes->post('auth/firebaseLogin', 'AuthController::firebaseLogin');
 $routes->post('logout', 'AuthController::logout');
 

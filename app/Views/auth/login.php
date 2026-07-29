@@ -71,6 +71,9 @@
                     required
                     autocomplete="current-password"
                 >
+                <div style="margin-top: 6px; text-align: right;">
+                    <a href="<?= base_url('forgot-password') ?>" class="text-sm text-muted" style="text-decoration: underline;">Lupa Password?</a>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary login-submit" id="btn-login">
                 Masuk
