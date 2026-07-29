@@ -1835,7 +1835,7 @@ tbody td {
     }
 
     .nav-links .nav-link {
-        font-size: 12.5px;
+        display: none;
     }
 
     .theme-toggle-btn {
