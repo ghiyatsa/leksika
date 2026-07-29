@@ -39,7 +39,6 @@ class ProfileController extends BaseController
 
         $rules = [
             'name'     => 'required|min_length[3]|max_length[100]',
-            'password' => 'permit_empty|min_length[6]',
             'avatar'   => 'permit_empty|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png,image/webp]|max_size[avatar,2048]',
         ];
 
@@ -47,22 +46,11 @@ class ProfileController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $name     = trim($this->request->getPost('name'));
-        $password = $this->request->getPost('password');
+        $name = trim($this->request->getPost('name'));
 
         $updateData = [
             'name'  => $name,
         ];
-
-        if (!empty($password)) {
-            $updateData['password'] = password_hash($password, PASSWORD_BCRYPT);
-        }
-
-        $firebase = service('firebaseAuth');
-
-        if (!empty($password) && $user['firebase_uid']) {
-            $firebase->updateUserPassword($user['firebase_uid'], $password);
-        }
 
         $avatarFile = $this->request->getFile('avatar');
         if ($avatarFile && $avatarFile->isValid() && !$avatarFile->hasMoved()) {
@@ -89,6 +77,52 @@ class ProfileController extends BaseController
         ]);
 
         return redirect()->back()->with('success', 'Profil Anda berhasil diperbarui.');
+    }
+
+    public function changePassword(): \CodeIgniter\HTTP\RedirectResponse
+    {
+        $userId = session()->get('userId');
+        $user   = $this->userModel->find($userId);
+
+        if ($user === null) {
+            return redirect()->to(base_url('login'))->with('error', 'Silakan login kembali.');
+        }
+
+        $rules = [
+            'current_password' => 'required',
+            'new_password'     => 'required|min_length[6]',
+            'confirm_password' => 'required|matches[new_password]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('errors', $this->validator->getErrors());
+        }
+
+        $current = $this->request->getPost('current_password');
+        $new     = $this->request->getPost('new_password');
+
+        if ($user['firebase_uid'] && empty($user['password'])) {
+            return redirect()->back()->with('error', 'Akun ini menggunakan Google Login. Tidak dapat mengubah password di sini.');
+        }
+
+        if (!empty($user['password']) && !password_verify($current, $user['password'])) {
+            return redirect()->back()->with('error', 'Password saat ini tidak sesuai.');
+        }
+
+        $firebase = service('firebaseAuth');
+
+        if ($user['firebase_uid']) {
+            $updated = $firebase->updateUserPassword($user['firebase_uid'], $new);
+            if (!$updated) {
+                return redirect()->back()->with('error', 'Gagal mengubah password di Firebase. Coba lagi.');
+            }
+        }
+
+        $this->userModel->update($userId, [
+            'password' => password_hash($new, PASSWORD_BCRYPT),
+        ]);
+
+        return redirect()->back()->with('success', 'Password berhasil diubah.');
     }
 
     public function deleteAvatar(): \CodeIgniter\HTTP\RedirectResponse

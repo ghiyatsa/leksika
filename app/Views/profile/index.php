@@ -89,6 +89,64 @@
     </div>
 </div>
 
+<!-- Change Password Section -->
+<div class="card mt-4">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Ubah Kata Sandi</div>
+            <div class="card-subtitle">Ganti kata sandi akun Anda</div>
+        </div>
+    </div>
+
+    <form action="<?= base_url('profile/change-password') ?>" method="POST">
+        <?= csrf_field() ?>
+
+        <div class="form-group">
+            <label for="current_password" class="form-label">Password Saat Ini <span class="required">*</span></label>
+            <input
+                type="password"
+                id="current_password"
+                name="current_password"
+                class="form-control"
+                placeholder="Masukkan password saat ini"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="new_password" class="form-label">Password Baru <span class="required">*</span></label>
+            <input
+                type="password"
+                id="new_password"
+                name="new_password"
+                class="form-control"
+                placeholder="Minimal 6 karakter"
+                required
+                minlength="6"
+            >
+            <div class="form-hint">Minimal 6 karakter.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password" class="form-label">Konfirmasi Password <span class="required">*</span></label>
+            <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                class="form-control"
+                placeholder="Ketik ulang password baru"
+                required
+            >
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <?= render_icon('lock') ?> Ubah Password
+            </button>
+        </div>
+    </form>
+</div>
+
 <!-- Danger Zone -->
 <div class="card danger-card mt-4">
     <div class="card-header">

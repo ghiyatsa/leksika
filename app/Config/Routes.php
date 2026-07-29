@@ -19,6 +19,7 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
     // Profile Management
     $routes->get('profile', 'ProfileController::index');
     $routes->post('profile/update', 'ProfileController::update');
+    $routes->post('profile/change-password', 'ProfileController::changePassword');
     $routes->post('profile/avatar/delete', 'ProfileController::deleteAvatar');
     $routes->post('profile/delete', 'ProfileController::deleteAccount');
 
