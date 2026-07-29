@@ -4,7 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 
-// ── Public Routes ─────────────────────────────────────────────────────────────
+// ── Route Publik ─────────────────────────────────────────────────────────────
 $routes->get('/', 'Home::index');
 $routes->get('login', 'AuthController::login');
 $routes->get('register', 'AuthController::register');
@@ -13,36 +13,36 @@ $routes->post('auth/forgot-password', 'AuthController::forgotPassword');
 $routes->post('auth/firebaseLogin', 'AuthController::firebaseLogin');
 $routes->post('logout', 'AuthController::logout');
 
-// ── Protected Routes (require login) ──────────────────────────────────────────
+// ── Route Terproteksi (wajib login) ──────────────────────────────────────────
 $routes->group('', ['filter' => 'auth'], static function (RouteCollection $routes): void {
 
-    // Profile Management
+    // Manajemen Profil
     $routes->get('profile', 'ProfileController::index');
     $routes->post('profile/update', 'ProfileController::update');
     $routes->post('profile/change-password', 'ProfileController::changePassword');
     $routes->post('profile/avatar/delete', 'ProfileController::deleteAvatar');
     $routes->post('profile/delete', 'ProfileController::deleteAccount');
 
-    // Similarity Check (Accessible by both Admin and Student roles, uses layout based on role)
+    // Cek Kemiripan (dapat diakses Admin dan User, layout berbeda per peran)
     $routes->get('similarity', 'SimilarityController::index');
     $routes->post('similarity/check', 'SimilarityController::check');
     $routes->get('similarity/history', 'SimilarityController::history');
     $routes->get('similarity/(:segment)', 'SimilarityController::result/$1');
 
-    // ── Admin-only Routes ──────────────────────────────────────────────────
+    // ── Route Khusus Admin ──────────────────────────────────────────────────
     $routes->group('admin', ['filter' => 'admin'], static function (RouteCollection $routes): void {
 
         // Dashboard
         $routes->get('dashboard', 'DashboardController::index');
 
-        // Thesis Titles CRUD
+        // CRUD Judul Skripsi
         $routes->get('thesis', 'Admin\ThesisTitleController::index');
         $routes->get('thesis/create', 'Admin\ThesisTitleController::create');
         $routes->post('thesis/store', 'Admin\ThesisTitleController::store');
         $routes->get('thesis/(:num)/edit', 'Admin\ThesisTitleController::edit/$1');
         $routes->post('thesis/(:num)/update', 'Admin\ThesisTitleController::update/$1');
         $routes->post('thesis/(:num)/delete', 'Admin\ThesisTitleController::delete/$1');
-        // Students CRUD
+        // CRUD Mahasiswa
         $routes->get('students', 'Admin\StudentController::index');
         $routes->get('students/create', 'Admin\StudentController::create');
         $routes->post('students/store', 'Admin\StudentController::store');
@@ -50,7 +50,7 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
         $routes->post('students/(:num)/update', 'Admin\StudentController::update/$1');
         $routes->post('students/(:num)/delete', 'Admin\StudentController::delete/$1');
 
-        // Categories CRUD
+        // CRUD Kategori
         $routes->get('categories', 'Admin\CategoryController::index');
         $routes->get('categories/create', 'Admin\CategoryController::create');
         $routes->post('categories/store', 'Admin\CategoryController::store');
@@ -58,11 +58,11 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
         $routes->post('categories/(:num)/update', 'Admin\CategoryController::update/$1');
         $routes->post('categories/(:num)/delete', 'Admin\CategoryController::delete/$1');
 
-        // Threshold Settings
+        // Pengaturan Ambang Batas
         $routes->get('threshold', 'Admin\ThresholdController::index');
         $routes->post('threshold/update', 'Admin\ThresholdController::update');
 
-        // User Management CRUD
+        // CRUD Manajemen Pengguna
         $routes->get('users', 'Admin\UserManagementController::index');
         $routes->get('users/create', 'Admin\UserManagementController::create');
         $routes->post('users/store', 'Admin\UserManagementController::store');

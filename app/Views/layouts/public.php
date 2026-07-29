@@ -56,7 +56,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme Toggle
+    // Toggle Tema
+
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {

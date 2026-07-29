@@ -3,15 +3,15 @@
 /**
  * Similarity Helper
  *
- * View-layer utilities for similarity result display.
- * Extracted from similarity/result.php to prevent redeclaration errors
- * and keep views logic-free.
+ * Utilitas layer tampilan untuk menampilkan hasil similaritas.
+ * Dipisahkan dari similarity/result.php untuk mencegah error redeklarasi
+ * dan menjaga view tetap bebas logika.
  */
 
 if (! function_exists('similarity_score_color')) {
     /**
-     * Returns Bootstrap-style color class (danger|warning|success)
-     * based on score vs. threshold settings.
+     * Mengembalikan kelas warna Bootstrap (danger|warning|success)
+     * berdasarkan skor vs ambang batas yang ditentukan.
      */
     function similarity_score_color(float $score, float $similarThreshold, float $reviewThreshold): string
     {
@@ -23,7 +23,7 @@ if (! function_exists('similarity_score_color')) {
 
 if (! function_exists('similarity_category_badge')) {
     /**
-     * Returns CSS badge class for a result category string.
+     * Mengembalikan kelas badge CSS untuk string kategori hasil.
      */
     function similarity_category_badge(string $category): string
     {
@@ -43,7 +43,7 @@ if (! function_exists('isActive')) {
 
 if (! function_exists('similarity_history_url')) {
     /**
-     * Returns the correct history URL based on user role.
+     * Mengembalikan URL riwayat yang benar berdasarkan peran pengguna.
      */
     function similarity_history_url(): string
     {

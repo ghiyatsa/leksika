@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * AdminFilter — restricts routes to admin-role users only.
+ * AdminFilter — membatasi route hanya untuk pengguna dengan peran admin.
  */
 class AdminFilter implements FilterInterface
 {

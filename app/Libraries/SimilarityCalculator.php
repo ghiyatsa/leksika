@@ -5,12 +5,12 @@ namespace App\Libraries;
 /**
  * SimilarityCalculator
  *
- * Implements the hybrid TF-IDF Cosine Similarity + Jaccard Similarity calculation.
+ * Implementasi perhitungan hybrid TF-IDF Cosine Similarity + Jaccard Similarity.
  *
- * Mathematical Definitions
+ * Definisi Matematis
  * ─────────────────────────────────────────────────────────────────────
  *  TF(t, d)     = count(t in d) / total_terms(d)
- *  IDF(t)       = log(N / df(t))          where N  = total docs, df(t) = docs containing t
+ *  IDF(t)       = log(N / df(t))          N  = total dokumen, df(t) = dokumen mengandung t
  *  TF-IDF(t,d)  = TF(t,d) × IDF(t)
  *
  *  Cosine(A,B)  = (A · B) / (‖A‖ × ‖B‖)
@@ -21,18 +21,18 @@ namespace App\Libraries;
 class SimilarityCalculator
 {
     /**
-     * Build TF-IDF vectors for a collection of tokenised documents.
+     * Bangun vektor TF-IDF untuk kumpulan dokumen yang sudah di-tokenisasi.
      *
      * @param  array $documents  [ docId => [token, token, ...], ... ]
-     * @return array             [ docId => [term => tfidf_weight, ...], ... ]
+     * @return array             [ docId => [term => bobot_tfidf, ...], ... ]
      */
     public function computeTfIdf(array $documents): array
     {
         $N    = count($documents);
-        $df   = [];   // document frequency per term
-        $tfs  = [];   // raw TF per document
+        $df   = [];   // frekuensi dokumen per term
+        $tfs  = [];   // TF mentah per dokumen
 
-        // ── Pass 1: TF and DF ─────────────────────────────────────────
+        // ── Pass 1: TF dan DF ──────────────────────────────────────────
         foreach ($documents as $docId => $tokens) {
             $termCount = count($tokens);
             if ($termCount === 0) {
@@ -60,11 +60,11 @@ class SimilarityCalculator
     }
 
     /**
-     * Cosine similarity between two sparse TF-IDF vectors.
+     * Similaritas kosinus antara dua vektor TF-IDF sparse.
      *
-     * @param  array $vecA  [term => weight]
-     * @param  array $vecB  [term => weight]
-     * @return float        Score in [0, 1]
+     * @param  array $vecA  [term => bobot]
+     * @param  array $vecB  [term => bobot]
+     * @return float        Skor dalam [0, 1]
      */
     public function cosineSimilarity(array $vecA, array $vecB): float
     {
@@ -72,7 +72,7 @@ class SimilarityCalculator
             return 0.0;
         }
 
-        // Dot product
+        // Produk dot
         $dotProduct = 0.0;
         foreach ($vecA as $term => $weightA) {
             if (isset($vecB[$term])) {
@@ -80,7 +80,7 @@ class SimilarityCalculator
             }
         }
 
-        // Magnitudes
+        // Magnitudo
         $magA = sqrt(array_sum(array_map(fn($w) => $w ** 2, $vecA)));
         $magB = sqrt(array_sum(array_map(fn($w) => $w ** 2, $vecB)));
 
@@ -92,11 +92,11 @@ class SimilarityCalculator
     }
 
     /**
-     * Jaccard similarity between two sets of tokens.
+     * Similaritas Jaccard antara dua himpunan token.
      *
-     * @param  array $tokensA  Preprocessed token array from document A
-     * @param  array $tokensB  Preprocessed token array from document B
-     * @return float           Score in [0, 1]
+     * @param  array $tokensA  Array token terproses dari dokumen A
+     * @param  array $tokensB  Array token terproses dari dokumen B
+     * @return float           Skor dalam [0, 1]
      */
     public function jaccardSimilarity(array $tokensA, array $tokensB): float
     {
@@ -120,7 +120,7 @@ class SimilarityCalculator
     }
 
     /**
-     * Combine cosine and jaccard into a single hybrid score.
+     * Gabungkan cosine dan jaccard menjadi satu skor hybrid.
      */
     public function hybridScore(float $cosine, float $jaccard, float $w1, float $w2): float
     {
@@ -128,7 +128,7 @@ class SimilarityCalculator
     }
 
     /**
-     * Determine result category based on threshold settings.
+     * Tentukan kategori hasil berdasarkan ambang batas.
      */
     public function getResultCategory(float $hybridScore, float $similarThreshold, float $reviewThreshold): string
     {
@@ -142,14 +142,14 @@ class SimilarityCalculator
     }
 
     /**
-     * Orchestrate the full similarity check.
+     * Jalankan pemeriksaan similaritas secara lengkap.
      *
-     * @param  string $inputTitle    The new title to check
-     * @param  string $inputKeyword  The new title's keywords
-     * @param  array  $thesisCollection  Array from ThesisModel::getAllForSimilarity()
-     * @param  array  $threshold     ['cosine_weight', 'jaccard_weight', 'similar_threshold', 'review_threshold']
+     * @param  string $inputTitle        Judul baru yang akan diperiksa
+     * @param  string $inputKeyword       Kata kunci judul baru
+     * @param  array  $thesisCollection  Array dari ThesisModel::getAllForSimilarity()
+     * @param  array  $threshold         ['cosine_weight', 'jaccard_weight', 'similar_threshold', 'review_threshold']
      * @param  TextPreprocessor $preprocessor
-     * @return array  Sorted results array (highest hybrid_score first)
+     * @return array  Array hasil yang diurutkan (hybrid_score tertinggi pertama)
      */
     public function runCheck(
         string $inputTitle,
@@ -163,12 +163,12 @@ class SimilarityCalculator
         $st = (float) $threshold['similar_threshold'];
         $rt = (float) $threshold['review_threshold'];
 
-        // ── Preprocessing ─────────────────────────────────────────────
+        // ── Pra-pemrosesan ────────────────────────────────────────────
         $inputText   = $inputTitle . ' ' . $inputKeyword;
         $inputTokens = $preprocessor->preprocess($inputText);
 
-        // Build the full corpus for TF-IDF:
-        // doc 0 = input, docs 1..N = existing thesis titles
+        // Bangun korpus lengkap untuk TF-IDF:
+        // doc 0 = input, docs 1..N = judul skripsi yang sudah ada
         $corpus = [0 => $inputTokens];
         foreach ($thesisCollection as $thesis) {
             $prepText = $thesis['preprocessed_text'] ?? '';
@@ -180,11 +180,11 @@ class SimilarityCalculator
             }
         }
 
-        // ── TF-IDF vectors ────────────────────────────────────────────
+        // ── Vektor TF-IDF ────────────────────────────────────────────
         $tfIdfVectors = $this->computeTfIdf($corpus);
         $inputVector  = $tfIdfVectors[0] ?? [];
 
-        // ── Compute per-document scores ───────────────────────────────
+        // ── Hitung skor per dokumen ───────────────────────────────────
         $results = [];
         foreach ($thesisCollection as $thesis) {
             $thesisTokens  = $corpus[$thesis['id']] ?? [];
@@ -210,7 +210,7 @@ class SimilarityCalculator
             ];
         }
 
-        // Sort descending by hybrid_score
+        // Urutkan menurun berdasarkan hybrid_score
         usort($results, fn($a, $b) => $b['hybrid_score'] <=> $a['hybrid_score']);
 
         return $results;

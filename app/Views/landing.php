@@ -184,7 +184,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme Toggle
+    // Toggle Tema
+
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
@@ -197,12 +198,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // Command Palette Modal Actions
+    // Aksi Modal Palet Perintah
+
     const cmdPalette = document.getElementById('cmd-palette');
     const cmdInput = document.getElementById('cmd-input');
     const cmdOpenBtn = document.getElementById('cmd-open-btn');
 
-    // ── Terminal Simulator (leksika-engine v2.0) ─────────────────────
+    // ── Simulator Terminal (leksika-engine v2.0) ─────────────────────
+
     const simBody = document.getElementById('sim-body');
     if (simBody) {
         simBody.setAttribute('aria-live', 'polite');
@@ -347,7 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             cmdPalette.classList.remove('active');
             cmdInput.value = '';
-            // Reset visibility of all quicklinks
+            // Reset visibilitas semua tautan cepat
+
             const items = document.querySelectorAll('.cmd-item');
             items.forEach(item => item.style.display = 'flex');
         }

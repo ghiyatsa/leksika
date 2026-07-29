@@ -3,8 +3,8 @@
 /**
  * UUID Helper
  *
- * Generates a cryptographically secure UUID v4 using random_bytes().
- * Safe replacement for mt_rand-based generation.
+ * Membangkitkan UUID v4 yang aman secara kriptografis menggunakan random_bytes().
+ * Pengganti aman untuk pembangkitan berbasis mt_rand.
  */
 
 if (! function_exists('generate_uuid')) {

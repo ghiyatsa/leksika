@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
         ini_set('memory_limit', '-1');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
 
-        // ── 1. USERS ──────────────────────────────────────────────────
+        // ── 1. PENGGUNA ────────────────────────────────────────────────
         $this->db->table('users')->truncate();
 
         $firebase = new FirebaseAuth();
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // ── 2. TOPIC CATEGORIES ───────────────────────────────────────
+        // ── 2. KATEGORI TOPIK ─────────────────────────────────────────
         $this->db->table('topic_categories')->truncate();
         $categories = [
             ['category_name' => 'Pengembangan Web',   'description' => 'Sistem berbasis web, e-commerce, portal, REST API, framework web', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
         ];
         $this->db->table('topic_categories')->insertBatch($categories);
 
-        // ── 3. STUDENTS ───────────────────────────────────────────────
+        // ── 3. MAHASISWA ──────────────────────────────────────────────
         $this->db->table('students')->truncate();
         $students = [
             ['student_id' => '200170205', 'name' => 'Mawaddah', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
@@ -540,9 +540,9 @@ class DatabaseSeeder extends Seeder
         ];
         $this->db->table('students')->insertBatch($students);
 
-        // ── 4. THESIS TITLES ──────────────────────────────────────────
+        // ── 4. JUDUL SKRIPSI ──────────────────────────────────────────
         $this->db->table('thesis')->truncate();
-        // We use DB query to get the inserted student IDs
+        // Gunakan query DB untuk mendapatkan ID mahasiswa yang sudah dimasukkan
         $studentsDb = $this->db->table('students')->get()->getResultArray();
         $nimToId = [];
         foreach ($studentsDb as $st) { $nimToId[$st['student_id']] = $st['id']; }
@@ -1055,7 +1055,7 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
             ]);
         }
 
-        // ── 5. THRESHOLD SETTINGS ─────────────────────────────────────
+        // ── 5. PENGATURAN AMBANG BATAS ────────────────────────────────
         $this->db->table('threshold_settings')->insert([
             'cosine_weight'          => 0.60,
             'jaccard_weight'         => 0.40,
@@ -1064,7 +1064,7 @@ dan identifikasi ayat secara otomatis. Kesimpulan dari penelitian ini adalah bah
             'max_similarity_results' => 5,
         ]);
 
-        // ── 6. SIMILARITY CHECKS (real computation) ──────────────────
+        // ── 6. RIWAYAT PENGECEKAN (perhitungan nyata) ─────────────────
         $this->db->table('similarity_checks')->truncate();
         $this->db->table('similarity_check_details')->truncate();
 

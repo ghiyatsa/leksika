@@ -196,7 +196,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // ── Avatar preview ──────────────────────────────────────────────
+    // ── Pratinjau Avatar ────────────────────────────────────────────
+
     const avatarInput = document.getElementById('avatar-input');
     const avatarFilename = document.getElementById('avatar-filename');
 
@@ -219,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Generic confirm modal helper ────────────────────────────────
+    // ── Helper modal konfirmasi generik ─────────────────────────────
+
     function openModal(id) {
         const overlay = document.getElementById(id);
         if (!overlay) return;
@@ -235,7 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.classList.remove('active');
     }
 
-    // ── Delete Account modal ────────────────────────────────────────
+    // ── Modal Hapus Akun ────────────────────────────────────────────
+
     const trigger = document.getElementById('delete-account-trigger');
     if (trigger) {
         trigger.addEventListener('click', () => openModal('confirm-delete-account'));
@@ -251,7 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Delete Avatar modal ─────────────────────────────────────────
+    // ── Modal Hapus Avatar ─────────────────────────────────────────
+
     const deleteAvatarBtn = document.getElementById('delete-avatar-btn');
     if (deleteAvatarBtn) {
         deleteAvatarBtn.addEventListener('click', () => openModal('confirm-delete-avatar'));
@@ -277,7 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close modals on Escape or backdrop click
+    // Tutup modal dengan Escape atau klik latar belakang
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal('confirm-delete-account');

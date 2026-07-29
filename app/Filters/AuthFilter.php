@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * AuthFilter — redirects unauthenticated requests to /login.
+ * AuthFilter — mengalihkan permintaan yang belum login ke /login.
  */
 class AuthFilter implements FilterInterface
 {

@@ -115,7 +115,7 @@ foreach ($topResults as $row) {
     let barChartInstance = null;
     let doughnutChartInstance = null;
 
-    // 1. Bar Chart (Left)
+    // 1. Grafik Batang (Kiri)
     const ctxBar = document.getElementById('barChart');
     if (ctxBar && totalChecks > 0) {
         barChartInstance = new Chart(ctxBar, {
@@ -152,7 +152,7 @@ foreach ($topResults as $row) {
         ctxBar.parentElement.innerHTML = emptyStateHtml;
     }
 
-    // 2. Doughnut Chart (Right) with Center Text
+    // 2. Grafik Donat (Kanan) dengan Teks Tengah
     const ctxDoughnut = document.getElementById('doughnutChart');
     if (ctxDoughnut && totalChecks > 0) {
         const centerTextPlugin = {
@@ -205,7 +205,7 @@ foreach ($topResults as $row) {
         ctxDoughnut.parentElement.innerHTML = emptyStateHtml;
     }
 
-    // Update function to apply new colors on theme toggle
+    // Fungsi update untuk menerapkan warna baru saat tema berubah
     function updateCharts() {
         colors = getThemeColors();
 
@@ -224,7 +224,7 @@ foreach ($topResults as $row) {
         }
     }
 
-    // Observe changes to documentElement for theme changes (data-theme attribute)
+    // Amati perubahan pada documentElement untuk perubahan tema (atribut data-theme)
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'data-theme') {

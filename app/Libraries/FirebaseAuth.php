@@ -17,21 +17,21 @@ class FirebaseAuth
         $this->config = config('Firebase');
     }
 
-    // ── Token Verification ────────────────────────────────────────────────────
+    // ── Verifikasi Token ──────────────────────────────────────────────────────
 
     public function verifyIdToken(string $idToken): ?object
     {
         $keys = $this->getPublicKeys();
 
         if (empty($keys)) {
-            log_message('error', 'Firebase public keys could not be fetched from Google');
+            log_message('error', 'Kunci publik Firebase gagal diambil dari Google');
             return null;
         }
 
         try {
             $decoded = JWT::decode($idToken, $keys);
         } catch (\Exception $e) {
-            log_message('error', 'Firebase JWT decode failed: ' . $e->getMessage());
+            log_message('error', 'Dekode JWT Firebase gagal: ' . $e->getMessage());
             return null;
         }
 
@@ -48,7 +48,7 @@ class FirebaseAuth
         return $decoded;
     }
 
-    // ── Local User Sync ───────────────────────────────────────────────────────
+    // ── Sinkronisasi Pengguna Lokal ───────────────────────────────────────────
 
     public function getOrCreateLocalUser(object $token): array
     {
@@ -80,11 +80,11 @@ class FirebaseAuth
         return $model->find($newId) ?? [];
     }
 
-    // ── User Management ───────────────────────────────────────────────────────
+    // ── Manajemen Pengguna ─────────────────────────────────────────────────────
 
     /**
-     * Create a Firebase user and auto-verify their email.
-     * Returns the Firebase UID on success, null on failure.
+     * Buat pengguna Firebase dan verifikasi email otomatis.
+     * Mengembalikan UID Firebase jika sukses, null jika gagal.
      */
     public function createUser(string $email, string $password, string $displayName = ''): ?string
     {
@@ -99,7 +99,7 @@ class FirebaseAuth
         );
 
         if (! isset($response['localId'])) {
-            log_message('error', 'Firebase createUser failed: ' . json_encode($response));
+            log_message('error', 'Firebase createUser gagal: ' . json_encode($response));
             return null;
         }
 
@@ -114,7 +114,7 @@ class FirebaseAuth
                     'json'    => ['localId' => $uid, 'emailVerified' => true],
                 ]);
             } catch (\Exception $e) {
-                log_message('error', 'Firebase email verify failed: ' . $e->getMessage());
+                log_message('error', 'Verifikasi email Firebase gagal: ' . $e->getMessage());
             }
         }
 
@@ -186,7 +186,7 @@ class FirebaseAuth
         return ! isset($response['error']);
     }
 
-    // ── Private Helpers ───────────────────────────────────────────────────────
+    // ── Helper Privat ─────────────────────────────────────────────────────────
 
     private function getPublicKeys(): array
     {
@@ -199,7 +199,7 @@ class FirebaseAuth
             $response = $client->get('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com');
             $certs    = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            log_message('error', 'Firebase public keys fetch failed: ' . $e->getMessage());
+            log_message('error', 'Ambil kunci publik Firebase gagal: ' . $e->getMessage());
             return [];
         }
 
@@ -217,8 +217,8 @@ class FirebaseAuth
     }
 
     /**
-     * Returns a cached Google OAuth2 access token.
-     * Token is cached in CI4 file cache with TTL 3500s (expires before the 1h Google limit).
+     * Mengembalikan token akses OAuth2 Google yang di-cache.
+     * Token di-cache di cache file CI4 dengan TTL 3500 detik (kedaluwarsa sebelum batas 1 jam Google).
      */
     private function getAccessToken(): ?string
     {
@@ -232,7 +232,7 @@ class FirebaseAuth
 
         $path = $this->config->credentialsPath;
         if ($path === '' || ! file_exists($path)) {
-            log_message('error', 'Firebase credentials file not found: ' . $path);
+            log_message('error', 'File kredensial Firebase tidak ditemukan: ' . $path);
             return null;
         }
 
@@ -262,7 +262,7 @@ class FirebaseAuth
         $token  = $result['access_token'] ?? null;
 
         if ($token !== null) {
-            // Cache for 3500s — safely under the 3600s Google token lifetime
+            // Cache 3500 detik — aman di bawah batas 3600 detik Google
             $cache->save($cacheKey, $token, 3500);
         }
 
@@ -276,7 +276,7 @@ class FirebaseAuth
             $response = $client->post($url, ['json' => $data]);
             return json_decode($response->getBody(), true) ?? [];
         } catch (\Exception $e) {
-            log_message('error', 'Firebase REST call failed: ' . $e->getMessage());
+            log_message('error', 'Panggilan REST Firebase gagal: ' . $e->getMessage());
             return [];
         }
     }

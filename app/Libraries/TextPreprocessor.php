@@ -8,10 +8,10 @@ use Sastrawi\StopWordRemover\StopWordRemoverFactory;
 /**
  * TextPreprocessor
  *
- * Performs Indonesian text preprocessing pipeline:
+ * Melakukan pipeline pra-pemrosesan teks bahasa Indonesia:
  *  1. Case folding
- *  2. Cleansing (remove punctuation, numbers, special chars)
- *  3. Tokenisation
+ *  2. Cleansing (hapus tanda baca, angka, karakter khusus)
+ *  3. Tokenisasi
  *  4. Stopword removal (Sastrawi)
  *  5. Stemming (Sastrawi)
  */
@@ -22,7 +22,7 @@ class TextPreprocessor
 
     public function __construct()
     {
-        // Sastrawi triggers E_DEPRECATED on PHP 8.2 — suppress once at construction only.
+        // Sastrawi memicu E_DEPRECATED di PHP 8.2 — ditekan sekali saat konstruktor.
         $prevHandler = set_error_handler(static function (int $errno): bool {
             return $errno === E_DEPRECATED || $errno === E_USER_DEPRECATED;
         });
@@ -39,32 +39,32 @@ class TextPreprocessor
     }
 
     /**
-     * Run the full preprocessing pipeline on a string.
+     * Jalankan pipeline pra-pemrosesan lengkap pada sebuah string.
      *
-     * @param  string $text Raw input text
-     * @return array        Array of clean stemmed tokens
+     * @param  string $text Teks masukan mentah
+     * @return array        Array token bersih yang sudah di-stem
      */
     public function preprocess(string $text): array
     {
         // 1. Case folding
         $text = mb_strtolower($text, 'UTF-8');
 
-        // 2. Cleansing — remove everything except letters and spaces
+        // 2. Cleansing — hapus semua kecuali huruf dan spasi
         $text = preg_replace('/[^a-z\s]/u', ' ', $text);
         $text = preg_replace('/\s+/', ' ', trim($text));
 
-        // 3. Stopword removal (Sastrawi operates on a string)
+        // 3. Stopword removal (Sastrawi bekerja pada string)
         $text = $this->stopWordRemover->remove($text);
 
         // 4. Stemming
         $text = $this->stemmer->stem($text);
 
-        // 5. Tokenise — discard single-character tokens
+        // 5. Tokenisasi — buang token satu karakter
         return array_values(array_filter(explode(' ', $text), fn ($t) => strlen($t) > 1));
     }
 
     /**
-     * Preprocess and return tokens as a unique set.
+     * Pra-pemrosesan dan kembalikan token sebagai himpunan unik.
      */
     public function preprocessToSet(string $text): array
     {
