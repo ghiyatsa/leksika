@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         simBody.setAttribute('aria-live', 'polite');
 
         const sampleTitles = [
-            "Sistem Informasi Pendataan Skripsi Berbasis Web",
+            "Implementasi Cosine Similarity Untuk Deteksi Plagiarisme",
             "Analisis Sentimen Ulasan Kuliner dengan Naive Bayes",
             "Penerapan Algoritma K-Means Untuk Pengelompokan Data"
         ];
