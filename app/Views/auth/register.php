@@ -120,7 +120,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     if (password !== confirm) {
         showError('Konfirmasi password tidak cocok.');
         btnRegister.disabled = false;
-        btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
+        btnRegister.innerHTML = '<?= addslashes('') ?> Buat Akun';
         return;
     }
 
@@ -133,7 +133,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
             showSuccess('Akun berhasil dibuat! Email verifikasi telah dikirim ke <strong>' + escapeHtml(email) + '</strong>. Silakan cek email Anda.');
             document.getElementById('register-form').reset();
             btnRegister.disabled = false;
-            btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
+            btnRegister.innerHTML = '<?= addslashes('') ?> Buat Akun';
         })
         .catch(err => {
             const code = err.code;
@@ -147,7 +147,7 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
                 showError('Gagal mendaftar: ' + err.message);
             }
             btnRegister.disabled = false;
-            btnRegister.innerHTML = '<?= addslashes('')) ?> Buat Akun';
+            btnRegister.innerHTML = '<?= addslashes('') ?> Buat Akun';
         });
 });
 

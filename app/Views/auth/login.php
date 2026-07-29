@@ -140,7 +140,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             if (data.error) {
                 showError(data.error);
                 btnLogin.disabled = false;
-                btnLogin.innerHTML = '<?= addslashes('')) ?> Masuk';
+                btnLogin.innerHTML = '<?= addslashes('') ?> Masuk';
                 return;
             }
             if (data.redirect) {
@@ -159,7 +159,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
                 showError('Gagal masuk: ' + err.message);
             }
             btnLogin.disabled = false;
-            btnLogin.innerHTML = '<?= addslashes('')) ?> Masuk';
+            btnLogin.innerHTML = '<?= addslashes('') ?> Masuk';
         });
 });
 
