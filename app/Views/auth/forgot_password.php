@@ -27,12 +27,8 @@
 <div class="login-page">
     <main class="login-card" id="main-content">
         <div class="login-header">
-            <div class="login-logo">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <rect width="32" height="32" rx="8" fill="var(--accent)"/>
-                    <path d="M8 22V10l8 6-8 6zM16 22V10l8 6-8 6z" fill="#fff" opacity="0.8"/>
-                    <path d="M16 22V10l8 6-8 6z" fill="#fff"/>
-                </svg>
+            <div class="login-logo brand-icon-gradient">
+                <?= render_icon('brand', ['style' => 'width: 24px; height: 24px; color: #fff;']) ?>
             </div>
             <h1>Lupa Password</h1>
             <p class="text-muted text-sm">Masukkan email Anda, kami akan kirim tautan reset password.</p>

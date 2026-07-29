@@ -39,7 +39,6 @@ class ProfileController extends BaseController
 
         $rules = [
             'name'     => 'required|min_length[3]|max_length[100]',
-            'email'    => "required|valid_email|is_unique[users.email,id,{$userId}]",
             'password' => 'permit_empty|min_length[6]',
             'avatar'   => 'permit_empty|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png,image/webp]|max_size[avatar,2048]',
         ];
@@ -49,12 +48,10 @@ class ProfileController extends BaseController
         }
 
         $name     = trim($this->request->getPost('name'));
-        $email    = trim($this->request->getPost('email'));
         $password = $this->request->getPost('password');
 
         $updateData = [
             'name'  => $name,
-            'email' => $email,
         ];
 
         if (!empty($password)) {
@@ -65,10 +62,6 @@ class ProfileController extends BaseController
 
         if (!empty($password) && $user['firebase_uid']) {
             $firebase->updateUserPassword($user['firebase_uid'], $password);
-        }
-
-        if ($email !== $user['email'] && $user['firebase_uid']) {
-            $firebase->updateUserEmail($user['firebase_uid'], $email);
         }
 
         $avatarFile = $this->request->getFile('avatar');
@@ -91,7 +84,6 @@ class ProfileController extends BaseController
 
         session()->set([
             'userName'         => $name,
-            'userEmail'        => $email,
             'userAvatar'       => $user['avatar'] ?? null,
             'userGoogleAvatar' => $user['google_avatar'] ?? null,
         ]);

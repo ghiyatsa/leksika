@@ -55,15 +55,17 @@
             </div>
 
             <div class="form-group">
-                <label for="email" class="form-label">Alamat Email <span class="required">*</span></label>
+                <label for="email" class="form-label">Alamat Email</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     class="form-control"
-                    value="<?= esc(old('email', $user['email'])) ?>"
-                    required
+                    value="<?= esc($user['email']) ?>"
+                    disabled
+                    aria-disabled="true"
                 >
+                <div class="form-hint" style="margin-top:4px;">Email tidak dapat diubah. Hubungi admin jika perlu perubahan.</div>
             </div>
 
             <div class="form-group">
