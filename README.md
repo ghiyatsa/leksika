@@ -82,49 +82,49 @@ Dimana $t_r$ adalah _review threshold_ (default 0,40) dan $t_s$ adalah _similar 
 
 ```
 Masukan (Judul + Kata Kunci)
-        │
-        ▼
-┌─────────────────────────┐
-│   TextPreprocessor       │
+             │
+             ▼
+┌───────────────────────────┐
+│   TextPreprocessor        │
 │   • Case folding          │
 │   • Cleansing             │
 │   • Stopword removal      │
 │   • Stemming              │
 │   • Tokenisasi            │
-└─────────┬───────────────┘
-          │
-          ▼
-┌─────────────────────────┐
+└────────────┬──────────────┘
+             │
+             ▼
+┌──────────────────────────┐
 │   SimilarityCalculator   │
 │                          │
-│   ┌─────────────────┐   │
+│   ┌──────────────────┐   │
 │   │  TF-IDF Vectors  │   │
 │   │  (seluruh korpus)│   │
-│   └────────┬────────┘   │
+│   └────────┬─────────┘   │
 │            │             │
-│   ┌────────▼────────┐   │
+│   ┌────────▼─────────┐   │
 │   │ Cosine Similarity│   │
-│   └────────┬────────┘   │
+│   └────────┬─────────┘   │
 │            │             │
-│   ┌────────▼────────┐   │
+│   ┌────────▼─────────┐   │
 │   │Jaccard Similarity│   │
-│   └────────┬────────┘   │
+│   └────────┬─────────┘   │
 │            │             │
-│   ┌────────▼────────┐   │
+│   ┌────────▼─────────┐   │
 │   │ Hybrid Score     │   │
 │   │ w1×Cosine +      │   │
 │   │ w2×Jaccard       │   │
-│   └────────┬────────┘   │
-└─────────────┬───────────┘
-              │
-              ▼
-┌─────────────────────────┐
+│   └────────┬─────────┘   │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
 │   Peringkat & Klasifikasi│
 │   Top-5 hasil dengan     │
 │   kategori: Aman /       │
 │   Perlu Ditinjau /       │
 │   Sangat Mirip           │
-└─────────────────────────┘
+└──────────────────────────┘
 ```
 
 ## Dataset
@@ -156,9 +156,9 @@ Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahas
 ```
 users ──1:N── similarity_checks ──1:N── similarity_check_details ──N:1── thesis
                                                                            │
-                                                              students ──1:1──┘
+                                                           students ──1:1──┘
                                                                            │
-                                                              topic_categories ──1:N──┘
+                                                   topic_categories ──1:N──┘
 ```
 
 ## Lisensi
