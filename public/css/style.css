@@ -2492,6 +2492,15 @@ tbody td {
     50% { opacity: 0.5; transform: scale(0.85); }
 }
 
+.sim-line.sim-verdict-high {
+    color: oklch(62% 0.20 28);
+    font-weight: 700;
+    background: oklch(62% 0.20 28 / 0.12);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid oklch(62% 0.20 28);
+    margin-top: 4px;
+}
 .sim-line.sim-verdict-med {
     color: oklch(72% 0.18 75);
     font-weight: 700;
@@ -2499,6 +2508,15 @@ tbody td {
     padding: 5px 10px;
     border-radius: var(--radius-sm);
     border-left: 3px solid oklch(72% 0.18 75);
+    margin-top: 4px;
+}
+.sim-line.sim-verdict-low {
+    color: oklch(62% 0.16 150);
+    font-weight: 700;
+    background: oklch(62% 0.16 150 / 0.12);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid oklch(62% 0.16 150);
     margin-top: 4px;
 }
 
@@ -2511,10 +2529,20 @@ tbody td {
 [data-theme="light"] .sim-line.sim-success::before {
     background: oklch(50% 0.18 150);
 }
+[data-theme="light"] .sim-line.sim-verdict-high {
+    color: oklch(50% 0.22 28);
+    background: oklch(62% 0.20 28 / 0.10);
+    border-left-color: oklch(50% 0.22 28);
+}
 [data-theme="light"] .sim-line.sim-verdict-med {
     color: oklch(45% 0.20 75);
     background: oklch(72% 0.18 75 / 0.10);
     border-left-color: oklch(45% 0.20 75);
+}
+[data-theme="light"] .sim-line.sim-verdict-low {
+    color: oklch(42% 0.18 150);
+    background: oklch(62% 0.16 150 / 0.10);
+    border-left-color: oklch(42% 0.18 150);
 }
 
 /* ── User Avatar Dropdown ────────────────────────────────────────── */
