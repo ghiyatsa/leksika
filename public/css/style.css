@@ -1636,6 +1636,7 @@ tbody td {
 
 /* Statistics Section */
 .stats-section {
+    scroll-margin-top: 80px;
     padding: 80px 24px;
     border-bottom: 1.5px solid var(--border);
     background: var(--bg-base);
@@ -1689,6 +1690,7 @@ tbody td {
 
 /* Methodology Section */
 .methodology-section {
+    scroll-margin-top: 80px;
     padding: 80px 24px;
     border-bottom: 1.5px solid var(--border);
     background: var(--bg-base);
@@ -1912,6 +1914,7 @@ tbody td {
     }
     
     .stats-section {
+        scroll-margin-top: 70px;
         padding: 48px 16px;
     }
 
@@ -1925,6 +1928,7 @@ tbody td {
     }
 
     .methodology-section {
+        scroll-margin-top: 70px;
         padding: 48px 16px;
     }
 
