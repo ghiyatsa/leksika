@@ -1432,37 +1432,6 @@ tbody td {
 }
 
 /* Mobile nav toggle */
-.nav-toggle {
-    display: none;
-    background: none;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 8px;
-    cursor: pointer;
-    color: var(--text-primary);
-    line-height: 0;
-    transition: border-color 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-toggle:hover {
-    border-color: var(--accent);
-}
-.nav-toggle svg {
-    width: 20px;
-    height: 20px;
-    stroke: currentColor;
-    stroke-width: 2;
-    fill: none;
-}
-.nav-toggle .close-icon {
-    display: none;
-}
-.nav-toggle.active .menu-icon {
-    display: none;
-}
-.nav-toggle.active .close-icon {
-    display: block;
-}
-
 /* Hero Section */
 .hero-section {
     padding-top: 140px;
@@ -1860,15 +1829,27 @@ tbody td {
     }
     
     .nav-links {
-        gap: 12px;
+        gap: 8px;
     }
 
     .nav-links .nav-link {
-        display: none;
+        font-size: 12.5px;
     }
 
-    .nav-toggle {
-        display: inline-flex;
+    .theme-toggle-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .avatar-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .btn-nav {
+        padding: 5px 10px;
+        font-size: 12px;
     }
 
     .hero-section {
@@ -2474,42 +2455,6 @@ tbody td {
 [data-theme="light"] .simulator-dots .dot.green { background: oklch(62% 0.16 150); }
 
 /* Mobile nav overlay */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    background: var(--bg-base);
-    padding: 80px 24px 24px;
-    overflow-y: auto;
-}
-.mobile-menu-overlay.active {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.mobile-menu-overlay .nav-link {
-    display: flex;
-    padding: 14px 16px;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-primary);
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    border: 1.5px solid var(--border);
-    background: var(--bg-surface);
-    transition: border-color 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.mobile-menu-overlay .nav-link:hover {
-    border-color: var(--accent);
-}
-.mobile-menu-overlay .btn-nav {
-    display: flex;
-    justify-content: center;
-    padding: 12px 20px;
-    font-size: 15px;
-}
-
 /* ── User Avatar Dropdown ────────────────────────────────────────── */
 .user-dropdown {
     position: relative;

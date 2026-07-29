@@ -52,22 +52,9 @@
             <?php else: ?>
                 <a href="<?= base_url('login') ?>" class="btn btn-primary btn-nav">Masuk</a>
             <?php endif; ?>
-            <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation menu">
-                <svg class="menu-icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                <svg class="close-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
         </div>
     </div>
 </nav>
-
-<div class="mobile-menu-overlay" id="mobileMenu">
-    <a href="<?= base_url('/#tentang') ?>" class="nav-link">Tentang</a>
-    <a href="<?= base_url('/#metodologi') ?>" class="nav-link">Metodologi</a>
-    <a href="<?= base_url('similarity') ?>" class="nav-link">Cek Kemiripan</a>
-    <?php if (!session()->get('isLoggedIn')): ?>
-        <a href="<?= base_url('login') ?>" class="btn btn-primary btn-nav">Masuk</a>
-    <?php endif; ?>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -89,29 +76,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const navToggle = document.getElementById('navToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (navToggle && mobileMenu) {
-        navToggle.addEventListener('click', () => {
-            const isActive = mobileMenu.classList.toggle('active');
-            navToggle.classList.toggle('active');
-            navToggle.setAttribute('aria-expanded', isActive);
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                mobileMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-                navToggle.focus();
-            }
-        });
-        mobileMenu.addEventListener('click', (e) => {
-            if (e.target === mobileMenu) {
-                mobileMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
 });
 </script>
