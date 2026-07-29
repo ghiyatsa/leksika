@@ -15,7 +15,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo git config --global --add safe.directory /home/admin/web/leksika.ghiyatsa.web.id/public_html
             cd /home/admin/web/leksika.ghiyatsa.web.id/public_html
-            git pull origin master
-            composer install --no-dev --no-interaction
+            sudo -u admin git pull origin master
+            sudo -u admin /usr/bin/composer install --no-dev --no-interaction
             sudo systemctl restart frankenphp-ci4.service
