@@ -1,346 +1,169 @@
-![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)
-![CodeIgniter 4](https://img.shields.io/badge/Framework-CodeIgniter_4.7-DD4814?style=flat&logo=codeigniter&logoColor=white)
-![MySQL](https://img.shields.io/badge/Database-MySQL_8-4479A1?style=flat&logo=mysql&logoColor=white)
-![Firebase](https://img.shields.io/badge/Auth-Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat)
-
-<br>
-<img alt="Leksika" src="https://img.shields.io/badge/Leksika-7C5CFC?style=for-the-badge&logo=graduation-cap&logoColor=white">
-
 # Leksika — Pengecekan Orisinalitas Judul Skripsi
 
-**Leksika** adalah aplikasi berbasis web untuk mendeteksi tingkat kemiripan antar judul skripsi menggunakan algoritma _hybrid TF-IDF Cosine Similarity_ dan _Jaccard Similarity_. Dikembangkan untuk Program Studi Teknik Informatika, Universitas Malikussaleh.
+**Leksika** adalah sistem berbasis web untuk mendeteksi tingkat kemiripan antar judul skripsi menggunakan algoritma _hybrid TF-IDF Cosine Similarity_ dan _Jaccard Similarity_. Dikembangkan sebagai bagian dari penelitian di Program Studi Teknik Informatika, Universitas Malikussaleh.
 
 ---
 
-## Daftar Isi
+## Latar Belakang
 
-- [Fitur](#fitur)
-- [Tech Stack](#tech-stack)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Konfigurasi](#konfigurasi)
-- [Penggunaan](#penggunaan)
-- [Struktur Database](#struktur-database)
-- [Deployment](#deployment)
-- [API](#api)
-- [Kontribusi](#kontribusi)
-- [Lisensi](#lisensi)
+Pertumbuhan jumlah judul skripsi di lingkungan akademik meningkatkan risiko kemiripan antar judul yang dapat mengarah pada duplikasi atau plagiarisme. Diperlukan suatu sistem yang mampu mengukur tingkat kemiripan secara kuantitatif dan objektif menggunakan pendekatan _text mining_ dan perhitungan similaritas teks.
 
----
+## Algoritma
 
-## Fitur
+Sistem menerapkan tiga metode perhitungan similaritas yang dikombinasikan secara hybrid:
 
-| Fitur | Deskripsi |
-|-------|-----------|
-| **Cek Kemiripan** | Masukkan judul dan kata kunci, sistem akan menghitung skor similaritas terhadap seluruh dataset judul skripsi yang tersimpan |
-| **Hybrid Similarity** | Menggabungkan **TF-IDF Cosine Similarity** (bobot vektor) dan **Jaccard Similarity** (irisan kata) dengan bobot yang dapat diatur |
-| **Riwayat Pengecekan** | Semua hasil pengecekan tersimpan dan dapat dilihat kembali kapan saja |
-| **Filter & Kategori Hasil** | Hasil dikategorikan otomatis: **Aman**, **Perlu Ditinjau**, atau **Sangat Mirip** berdasarkan ambang batas yang dikonfigurasi |
-| **Manajemen Data** | CRUD untuk judul skripsi, mahasiswa, kategori topik, pengguna, dan pengaturan ambang batas |
-| **Autentikasi Firebase** | Login dengan Email/Password atau Google, termasuk fitur reset password dan verifikasi email |
-| **Dua Peran Pengguna** | **Admin** (dashboard, manajemen data) dan **User/Mahasiswa** (cek kemiripan, riwayat) |
-| **Mode Gelap/Terang** | Toggle tema dengan preferensi tersimpan di localStorage |
-| **Responsif** | Antarmuka yang responsif untuk desktop dan perangkat seluler |
+### 1. Pra-Pemrosesan Teks
 
-## Tech Stack
+Sebelum perhitungan similaritas, teks melalui lima tahap pra-pemrosesan:
 
-| Lapisan | Teknologi |
-|---------|-----------|
-| **Framework** | [CodeIgniter 4.7](https://codeigniter.com) |
-| **Bahasa** | PHP 8.2+ |
-| **Database** | MySQL 8 / MariaDB |
-| **Autentikasi** | Firebase Authentication (Email/Password + Google) |
-| **Firebase Admin** | Firebase Admin SDK via REST API |
-| **Text Processing** | Sastrawi (stemming & stopword removal Bahasa Indonesia) |
-| **JWT** | firebase/php-jwt |
-| **Server** | FrankenPHP / Apache / Nginx + PHP-FPM |
-| **CI/CD** | GitHub Actions |
-| **Frontend** | CSS murni (tanpa framework), Chart.js, Firebase JS SDK |
+1. **Case folding** — konversi seluruh karakter menjadi huruf kecil (*lowercase*)
+2. **Cleansing** — penghapusan tanda baca, angka, dan karakter khusus
+3. **Tokenisasi** — pemisahan teks menjadi token/kata individual
+4. **Stopword removal** — penghapusan kata umum tidak bermakna menggunakan Sastrawi
+5. **Stemming** — pengembalian kata ke bentuk dasarnya menggunakan Sastrawi
 
-## Persyaratan Sistem
+### 2. TF-IDF (*Term Frequency — Inverse Document Frequency*)
 
-- PHP 8.2 atau lebih baru
-- Ekstensi PHP: `intl`, `mbstring`, `json`, `mysqlnd`, `curl`, `fileinfo`
-- Composer 2.x
-- MySQL 8.0+ atau MariaDB 10.5+
-- Node.js (untuk minifikasi aset — opsional)
-- Server: FrankenPHP (direkomendasikan), Nginx + PHP-FPM, atau Apache
+TF-IDF adalah metode pembobotan yang merepresentasikan setiap dokumen sebagai vektor dalam ruang _terms_.
 
-## Instalasi
+**Definisi:**
 
-### 1. Clone Repository
+$$TF(t, d) = \frac{\text{count}(t, d)}{\text{total\_terms}(d)}$$
 
-```bash
-git clone https://github.com/ghiyatsa/leksika.git
-cd leksika
-```
+$$IDF(t) = \log\frac{N}{df(t)}$$
 
-### 2. Install Dependensi
+$$TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)$$
 
-```bash
-composer install
-```
+Dimana:
+- $N$ = jumlah total dokumen dalam korpus
+- $df(t)$ = jumlah dokumen yang mengandung term $t$
 
-### 3. Konfigurasi Lingkungan
+### 3. Cosine Similarity
 
-```bash
-cp env .env
-```
+Similaritas kosinus mengukur kemiripan antara dua vektor TF-IDF berdasarkan sudut antar vektor dalam ruang _n_-dimensi.
 
-Edit `.env` sesuai lingkungan Anda:
+**Definisi:**
 
-```ini
-CI_ENVIRONMENT = development
-app.baseURL = 'http://localhost:8080'
+$$\text{Cosine}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}$$
 
-database.default.hostname = localhost
-database.default.database = db_skripsi_similarity
-database.default.username = root
-database.default.password =
+Nilai berkisar antara 0 (tidak mirip) hingga 1 (identik). Metode ini menangkap kemiripan semantik berdasarkan distribusi kata dalam dokumen.
 
-firebase.projectId = 'your-firebase-project-id'
-firebase.apiKey = 'your-firebase-api-key'
-firebase.authDomain = 'your-project.firebaseapp.com'
-firebase.credentialsPath = '/path/to/firebase-credentials.json'
-```
+### 4. Jaccard Similarity
 
-### 4. Konfigurasi Firebase
+Similaritas Jaccard mengukur kemiripan berdasarkan irisan dan gabungan dua himpunan token.
 
-1. Buat proyek di [Firebase Console](https://console.firebase.google.com)
-2. Aktifkan metode login **Email/Password** dan **Google**
-3. Buat _service account_ dan unduh file JSON kredensial
-4. Simpan kredensial di luar web root (contoh: `/home/admin/credentials/firebase-credentials.json`)
-5. Set `firebase.credentialsPath` di `.env` sesuai path tersebut
+**Definisi:**
 
-### 5. Database
+$$\text{Jaccard}(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
 
-```bash
-php spark migrate
-php spark db:seed DatabaseSeeder
-```
+Metode ini menangkap kemiripan leksikal berdasarkan kata-kata yang sama-sama muncul di kedua dokumen.
 
-Perintah di atas akan:
-- Membuat semua tabel yang diperlukan
-- Mengisi data awal: pengguna, mahasiswa, kategori, judul skripsi, pengaturan threshold
-- Membuat akun pengguna di Firebase (jika terkoneksi)
+### 5. Skor Hybrid
 
-### 6. Jalankan Aplikasi
+Skor akhir merupakan kombinasi linear dari Cosine Similarity dan Jaccard Similarity:
 
-**FrankenPHP (direkomendasikan)**
+$$\text{Hybrid} = w_1 \times \text{Cosine} + w_2 \times \text{Jaccard}$$
 
-```bash
-php frankenphp start
-```
+Bobot $w_1$ dan $w_2$ dapat dikonfigurasi oleh administrator melalui panel pengaturan threshold. Nilai default: $w_1 = 0{,}60$ (cosine), $w_2 = 0{,}40$ (jaccard).
 
-**PHP Built-in Server (development)**
+## Klasifikasi Hasil
 
-```bash
-php spark serve
-```
+Berdasarkan skor hybrid, sistem mengklasifikasikan hasil ke dalam tiga kategori:
 
-Akses di `http://localhost:8080`
+| Kategori | Rentang Hybrid | Interpretasi |
+|----------|---------------|--------------|
+| **Aman** | < $t_r$ | Judul cukup berbeda dan aman digunakan |
+| **Perlu Ditinjau** | $t_r$ – $t_s$ | Terdapat kemiripan yang perlu ditinjau |
+| **Sangat Mirip** | $\geq t_s$ | Judul memiliki kemiripan tinggi, disarankan revisi |
 
-### 7. Minifikasi Aset (Produksi)
+Dimana $t_r$ adalah _review threshold_ (default 0,40) dan $t_s$ adalah _similar threshold_ (default 0,75). Kedua ambang batas dapat disesuaikan oleh administrator.
 
-```bash
-npx lightningcss-cli --minify public/css/style.css -o public/css/style.min.css
-npx terser public/js/app.js -o public/js/app.min.js -c -m
-```
-
-## Penggunaan
-
-### Akun Bawaan (Seeder)
-
-| Peran | Email | Password |
-|-------|-------|----------|
-| Admin | `admin@leksika.com` | `admin123` |
-| User | `user@leksika.com` | `user123` |
-| Demo User | `demo@leksika.com` | `demo123` |
-| Mahasiswa A | `mahasisw1@leksika.com` | `mhs123` |
-
-### Cek Kemiripan
-
-1. Login sebagai **User** atau **Admin**
-2. Buka menu **Cek Kemiripan**
-3. Masukkan judul skripsi yang ingin diperiksa
-4. (Opsional) Tambahkan kata kunci
-5. Klik **Cek Sekarang**
-6. Sistem akan menampilkan hingga 5 judul paling mirip dengan skor similaritas
-
-### Diagram Alur Pengecekan
+## Arsitektur Sistem
 
 ```
-Input Judul + Keyword
+Masukan (Judul + Kata Kunci)
         │
         ▼
-┌─────────────────┐
- │  TextPreprocessor │
- │  • Case folding    │
- │  • Cleansing       │
- │  • Stopword removal│
- │  • Stemming        │
- └────────┬──────────┘
+┌─────────────────────────┐
+│   TextPreprocessor       │
+│   • Case folding          │
+│   • Cleansing             │
+│   • Stopword removal      │
+│   • Stemming              │
+│   • Tokenisasi            │
+└─────────┬───────────────┘
           │
           ▼
-┌─────────────────┐
- │ SimilarityCalc   │
- │  • TF-IDF Vector  │
- │  • Cosine Sim.    │
- │  • Jaccard Sim.   │
- │  • Hybrid Score   │
- └────────┬──────────┘
-          │
-          ▼
-┌─────────────────┐
- │   Hasil (Top 5)  │
- │  Sangat Mirip    │
- │  Perlu Ditinjau  │
- │  Aman            │
- └─────────────────┘
+┌─────────────────────────┐
+│   SimilarityCalculator   │
+│                          │
+│   ┌─────────────────┐   │
+│   │  TF-IDF Vectors  │   │
+│   │  (seluruh korpus)│   │
+│   └────────┬────────┘   │
+│            │             │
+│   ┌────────▼────────┐   │
+│   │ Cosine Similarity│   │
+│   └────────┬────────┘   │
+│            │             │
+│   ┌────────▼────────┐   │
+│   │Jaccard Similarity│   │
+│   └────────┬────────┘   │
+│            │             │
+│   ┌────────▼────────┐   │
+│   │ Hybrid Score     │   │
+│   │ w1×Cosine +      │   │
+│   │ w2×Jaccard       │   │
+│   └────────┬────────┘   │
+└─────────────┬───────────┘
+              │
+              ▼
+┌─────────────────────────┐
+│   Peringkat & Klasifikasi│
+│   Top-5 hasil dengan     │
+│   kategori: Aman /       │
+│   Perlu Ditinjau /       │
+│   Sangat Mirip           │
+└─────────────────────────┘
 ```
 
-### Interpretasi Skor
+## Dataset
 
-| Kategori | Rentang Hybrid | Tindakan |
-|----------|---------------|----------|
-| 🟢 Aman | 0.00 – 0.39 | Judul aman digunakan |
-| 🟡 Perlu Ditinjau | 0.40 – 0.74 | Disarankan merevisi judul |
-| 🔴 Sangat Mirip | 0.75 – 1.00 | Judul terlalu mirip, harus diganti |
+Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahasiswa Program Studi Teknik Informatika Universitas Malikussaleh, mencakup 126 judul skripsi dari berbagai kategori topik, antara lain:
 
-*Ambang batas dapat disesuaikan oleh Admin di menu **Pengaturan Threshold**.*
+- Kecerdasan Buatan
+- Pengembangan Web
+- Data Mining
+- Sistem Informasi
+- Internet of Things
+- Jaringan Komputer
+- Mobile
+- Keamanan Informasi
+
+## Teknologi
+
+| Komponen | Teknologi |
+|----------|-----------|
+| Bahasa Pemrograman | PHP 8.2 |
+| Framework | CodeIgniter 4.7 |
+| Basis Data | MySQL 8 / MariaDB |
+| Autentikasi | Firebase Authentication |
+| Text Mining | Sastrawi (stemming Bahasa Indonesia) |
+| Server | FrankenPHP / Nginx + PHP-FPM |
 
 ## Struktur Database
 
 ```
-users
-├── id (PK)
-├── name
-├── email (UNIQUE)
-├── password
-├── role (admin|user)
-├── firebase_uid (UNIQUE)
-├── avatar
-└── google_avatar
-
-topic_categories
-├── id (PK)
-├── category_name
-└── description
-
-students
-├── id (PK)
-├── student_id (UNIQUE)
-└── name
-
-thesis
-├── id (PK)
-├── student_id (FK → students.id)
-├── category_id (FK → topic_categories.id)
-├── title
-├── keyword
-├── abstract
-├── year
-└── preprocessed_text
-
-similarity_checks
-├── id (PK)
-├── user_id (FK → users.id)
-├── uuid (UNIQUE)
-├── input_title
-└── checked_at
-
-similarity_check_details
-├── id (PK)
-├── check_id (FK → similarity_checks.id)
-├── thesis_id (FK → thesis.id)
-├── cosine_score
-├── jaccard_score
-├── hybrid_score
-└── result_category
-
-threshold_settings
-├── id (PK)
-├── cosine_weight
-├── jaccard_weight
-├── similar_threshold
-├── review_threshold
-└── max_similarity_results
+users ──1:N── similarity_checks ──1:N── similarity_check_details ──N:1── thesis
+                                                                           │
+                                                              students ──1:1──┘
+                                                                           │
+                                                              topic_categories ──1:N──┘
 ```
-
-### Relasi
-
-```
-users 1─N similarity_checks 1─N similarity_check_details N─1 thesis
-                                                                    │
-students 1─1 thesis N─1 topic_categories                           │
-students 1─1 thesis ───────────────────────────────────────────────┘
-```
-
-## Deployment
-
-### GitHub Actions (Otomatis)
-
-Repository ini dilengkapi workflow GitHub Actions di `.github/workflows/deploy.yml` yang secara otomatis:
-
-1. Mengecek kode dari branch `master`
-2. Menginstal dependensi Composer
-3. Menyalin file ke server via rsync
-4. Menjalankan migrasi database
-5. Meminifikasi aset CSS/JS
-6. Me-reboot FrankenPHP
-
-### Manual (VPS)
-
-```bash
-# Pull perubahan
-git pull origin master
-
-# Install dependensi
-composer install --no-dev --optimize-autoloader
-
-# Copy env
-cp .env.production .env
-
-# Migrasi database
-php spark migrate
-
-# Seed data awal (hanya sekali)
-php spark db:seed DatabaseSeeder
-
-# Minifikasi aset
-npx lightningcss-cli --minify public/css/style.css -o public/css/style.min.css
-npx terser public/js/app.js -o public/js/app.min.js -c -m
-
-# Restart server
-sudo systemctl restart frankenphp-ci4
-```
-
-### Struktur Direktori Server
-
-```
-public_html/
-├── app/
-├── public/
-├── vendor/
-├── writable/
-├── .env
-├── spark
-└── Caddyfile
-```
-
-## Keamanan
-
-- **Password** disimpan dengan bcrypt (`password_hash`)
-- **Session** terenkripsi dan aman
-- **CSRF Protection** aktif untuk semua form
-- **Firebase Admin SDK** untuk operasi sensitif (create/delete user)
-- **Validasi input** di semua endpoint
-- **Filter akses** berdasarkan peran (Admin, User)
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah **MIT License** — lihat file [LICENSE](LICENSE) untuk detail.
+Proyek ini dilisensikan di bawah **MIT License**.
 
 ---
 
