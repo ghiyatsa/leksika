@@ -26,7 +26,7 @@
                     <div class="dropdown-menu" id="avatarDropdownMenu">
                         <div class="dropdown-header">
                             <div class="user-name"><?= esc(session()->get('userName')) ?></div>
-                            <div class="user-role"><?= esc(session()->get('role')) ?></div>
+                            <div class="user-role"><?= esc(session()->get('userEmail')) ?></div>
                         </div>
                         <hr class="dropdown-divider">
                         <a href="<?= base_url('profile') ?>" class="dropdown-item">
