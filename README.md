@@ -1,17 +1,11 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Language-PHP_8.2-777BB4?style=flat&logo=php&logoColor=white">
-  <img alt="PHP" src="https://img.shields.io/badge/Language-PHP_8.2-777BB4?style=flat&logo=php&logoColor=white">
-</picture>
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)
 ![CodeIgniter 4](https://img.shields.io/badge/Framework-CodeIgniter_4.7-DD4814?style=flat&logo=codeigniter&logoColor=white)
 ![MySQL](https://img.shields.io/badge/Database-MySQL_8-4479A1?style=flat&logo=mysql&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Auth-Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 <br>
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Leksika-7C5CFC?style=for-the-badge&logo=graduation-cap&logoColor=white">
-  <img alt="Leksika" src="https://img.shields.io/badge/Leksika-7C5CFC?style=for-the-badge&logo=graduation-cap&logoColor=white">
-</picture>
+<img alt="Leksika" src="https://img.shields.io/badge/Leksika-7C5CFC?style=for-the-badge&logo=graduation-cap&logoColor=white">
 
 # Leksika — Pengecekan Orisinalitas Judul Skripsi
 
