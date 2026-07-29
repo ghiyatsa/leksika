@@ -84,14 +84,14 @@ Dimana $t_r$ adalah _review threshold_ (default 0,40) dan $t_s$ adalah _similar 
 Masukan (Judul + Kata Kunci)
              │
              ▼
-┌───────────────────────────┐
-│   TextPreprocessor        │
-│   • Case folding          │
-│   • Cleansing             │
-│   • Stopword removal      │
-│   • Stemming              │
-│   • Tokenisasi            │
-└────────────┬──────────────┘
+┌──────────────────────────┐
+│   TextPreprocessor       │
+│   • Case folding         │
+│   • Cleansing            │
+│   • Stopword removal     │
+│   • Stemming             │
+│   • Tokenisasi           │
+└────────────┬─────────────┘
              │
              ▼
 ┌──────────────────────────┐
