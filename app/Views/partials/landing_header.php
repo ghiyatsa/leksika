@@ -41,9 +41,12 @@
                             <?= render_icon('file-check', ['style' => 'width: 14px; height: 14px;']) ?> Riwayat
                         </a>
                         <hr class="dropdown-divider">
-                        <a href="<?= base_url('logout') ?>" class="dropdown-item text-danger">
-                            <?= render_icon('log-out', ['style' => 'width: 14px; height: 14px;']) ?> Keluar
-                        </a>
+                        <form method="POST" action="<?= base_url('logout') ?>" style="margin: 0;">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="dropdown-item text-danger" style="width: 100%; border: none; background: none; cursor: pointer; font: inherit; padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                                <?= render_icon('log-out', ['style' => 'width: 14px; height: 14px;']) ?> Keluar
+                            </button>
+                        </form>
                     </div>
                 </div>
             <?php else: ?>
