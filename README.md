@@ -28,9 +28,9 @@ TF-IDF adalah metode pembobotan yang merepresentasikan setiap dokumen sebagai ve
 
 **Definisi:**
 
-$$TF(t, d) = \frac{\text{count}(t, d)}{\text{total\_terms}(d)}$$
+$$TF(t, d) = \frac{\mathrm{count}(t, d)}{\mathrm{total\_terms}(d)}$$
 
-$$IDF(t) = \log\frac{N}{df(t)}$$
+$$IDF(t) = \log\frac{N}{\mathrm{df}(t)}$$
 
 $$TF\text{-}IDF(t, d) = TF(t, d) \times IDF(t)$$
 
@@ -44,7 +44,7 @@ Similaritas kosinus mengukur kemiripan antara dua vektor TF-IDF berdasarkan sudu
 
 **Definisi:**
 
-$$\text{Cosine}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}$$
+$$\mathrm{Cosine}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}$$
 
 Nilai berkisar antara 0 (tidak mirip) hingga 1 (identik). Metode ini menangkap kemiripan semantik berdasarkan distribusi kata dalam dokumen.
 
@@ -54,7 +54,7 @@ Similaritas Jaccard mengukur kemiripan berdasarkan irisan dan gabungan dua himpu
 
 **Definisi:**
 
-$$\text{Jaccard}(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
+$$\mathrm{Jaccard}(A, B) = \frac{|A \cap B|}{|A \cup B|}$$
 
 Metode ini menangkap kemiripan leksikal berdasarkan kata-kata yang sama-sama muncul di kedua dokumen.
 
@@ -62,7 +62,7 @@ Metode ini menangkap kemiripan leksikal berdasarkan kata-kata yang sama-sama mun
 
 Skor akhir merupakan kombinasi linear dari Cosine Similarity dan Jaccard Similarity:
 
-$$\text{Hybrid} = w_1 \times \text{Cosine} + w_2 \times \text{Jaccard}$$
+$$\mathrm{Hybrid} = w_1 \times \mathrm{Cosine} + w_2 \times \mathrm{Jaccard}$$
 
 Bobot $w_1$ dan $w_2$ dapat dikonfigurasi oleh administrator melalui panel pengaturan threshold. Nilai default: $w_1 = 0{,}60$ (cosine), $w_2 = 0{,}40$ (jaccard).
 
