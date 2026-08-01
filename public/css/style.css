@@ -1850,7 +1850,7 @@ tbody td {
 /* ── Responsive rules ────────────────────────────────────────────── */
 @media (max-width: 880px) {
     .landing-nav {
-        padding: 10px 16px;
+        padding: 16px 16px;
     }
     
     .nav-links {
@@ -2025,7 +2025,7 @@ tbody td {
     /* Polish Mobile Responsiveness */
     .topbar {
         padding: 0 16px;
-        height: 64px;
+        height: 72px;
     }
 
     .sidebar-logo {

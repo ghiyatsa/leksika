@@ -17,12 +17,39 @@ class ThesisModel extends Model
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
 
+    protected $beforeInsert     = ['preprocessText'];
+    protected $beforeUpdate     = ['preprocessText'];
+
     protected $validationRules = [
         'student_id'  => 'required|integer',
         'category_id' => 'required|integer',
         'title'       => 'required|min_length[10]',
         'year'        => 'permit_empty|integer|min_length[4]|max_length[4]',
     ];
+
+    protected function preprocessText(array $data): array
+    {
+        $title = $data['data']['title'] ?? null;
+        $keyword = $data['data']['keyword'] ?? null;
+
+        if ($title !== null || $keyword !== null) {
+            if ($title === null || $keyword === null) {
+                $id = $data['id'][0] ?? ($data['id'] ?? null);
+                if ($id) {
+                    $existing = $this->find($id);
+                    if ($existing) {
+                        $title = $title ?? $existing['title'] ?? '';
+                        $keyword = $keyword ?? $existing['keyword'] ?? '';
+                    }
+                }
+            }
+            $preprocessor = service('textPreprocessor');
+            $tokens = $preprocessor->preprocess(($title ?? '') . ' ' . ($keyword ?? ''));
+            $data['data']['preprocessed_text'] = implode(' ', $tokens);
+        }
+
+        return $data;
+    }
 
     public function getWithRelations(string $search = '', int $perPage = 10, int $page = 1): array
     {

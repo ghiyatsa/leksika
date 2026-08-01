@@ -46,28 +46,29 @@ class TextPreprocessor
      */
     public function preprocess(string $text): array
     {
-        // 1. Case folding
-        $text = mb_strtolower($text, 'UTF-8');
+        $prevHandler = set_error_handler(static function (int $errno): bool {
+            return $errno === E_DEPRECATED || $errno === E_USER_DEPRECATED;
+        });
 
-        // 2. Cleansing — hapus semua kecuali huruf dan spasi
-        $text = preg_replace('/[^a-z\s]/u', ' ', $text);
-        $text = preg_replace('/\s+/', ' ', trim($text));
+        try {
+            // 1. Case folding
+            $text = mb_strtolower($text, 'UTF-8');
 
-        // 3. Stopword removal (Sastrawi bekerja pada string)
-        $text = $this->stopWordRemover->remove($text);
+            // 2. Cleansing — hapus semua kecuali huruf dan spasi
+            $text = preg_replace('/[^a-z\s]/u', ' ', $text);
+            $text = preg_replace('/\s+/', ' ', trim($text));
 
-        // 4. Stemming
-        $text = $this->stemmer->stem($text);
+            // 3. Stopword removal (Sastrawi bekerja pada string)
+            $text = $this->stopWordRemover->remove($text);
 
-        // 5. Tokenisasi — buang token satu karakter
-        return array_values(array_filter(explode(' ', $text), fn ($t) => strlen($t) > 1));
+            // 4. Stemming
+            $text = $this->stemmer->stem($text);
+
+            // 5. Tokenisasi — buang token satu karakter
+            return array_values(array_filter(explode(' ', $text), fn ($t) => strlen($t) > 1));
+        } finally {
+            set_error_handler($prevHandler);
+        }
     }
 
-    /**
-     * Pra-pemrosesan dan kembalikan token sebagai himpunan unik.
-     */
-    public function preprocessToSet(string $text): array
-    {
-        return array_unique($this->preprocess($text));
-    }
 }

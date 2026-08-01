@@ -40,13 +40,3 @@ if (! function_exists('isActive')) {
         return str_starts_with($current, $path) ? 'active' : '';
     }
 }
-
-if (! function_exists('similarity_history_url')) {
-    /**
-     * Mengembalikan URL riwayat yang benar berdasarkan peran pengguna.
-     */
-    function similarity_history_url(): string
-    {
-        return base_url('similarity/history');
-    }
-}

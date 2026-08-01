@@ -143,7 +143,7 @@
             <?= render_icon('graduation-cap', ['style' => 'width: 20px; height: 20px; vertical-align: text-bottom; margin-right: 4px;']) ?> leksika
         </div>
         <p class="footer-copyright">
-            &copy; <?= date('Y') ?> Universitas Malikussaleh. Dikembangkan oleh Program Studi Teknik Informatika.
+            &copy; <?= date('Y') ?> Universitas Malikussaleh. Dikembangkan oleh Tim I.
         </p>
     </div>
 </footer>

@@ -49,7 +49,7 @@
     <!-- Footer -->
     <footer class="public-footer">
         <div class="public-container">
-            &copy; <?= date('Y') ?> Universitas Malikussaleh. Dikembangkan oleh Program Studi Teknik Informatika.
+            &copy; <?= date('Y') ?> Universitas Malikussaleh. Dikembangkan oleh Tim I.
         </div>
     </footer>
 </div>

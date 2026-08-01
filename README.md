@@ -127,6 +127,53 @@ Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahas
 | Autentikasi | Firebase Authentication |
 | Text Mining | Sastrawi (stemming Bahasa Indonesia) |
 | Server | FrankenPHP / Nginx + PHP-FPM |
+## Instalasi dan Inisialisasi
+
+Ikuti langkah-langkah berikut untuk menjalankan program Leksika di lingkungan lokal Anda:
+
+### 1. Prasyarat
+Pastikan sistem Anda sudah terpasang:
+* **PHP >= 8.2** (pastikan ekstensi `intl`, `mbstring`, `curl`, `json` aktif)
+* **Composer** (manajer dependensi PHP)
+* **MySQL / MariaDB**
+
+### 2. Pemasangan Dependensi
+Unduh semua pustaka PHP yang dibutuhkan dengan perintah:
+```bash
+composer install
+```
+
+### 3. Konfigurasi Lingkungan (.env)
+1. Salin berkas `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+2. Buka berkas `.env` lalu sesuaikan konfigurasi basis data Anda (`database.default.database`, `database.default.username`, dll).
+3. Masukkan kredensial Firebase Authentication proyek Anda pada bagian Firebase.
+4. Letakkan berkas kredensial privat Firebase Admin SDK (dalam format JSON) ke direktori root proyek dan pastikan namanya sesuai dengan nilai variabel `FIREBASE_CREDENTIALS` di `.env` (default: `firebase-credentials.json`).
+
+### 4. Setup Basis Data dan Seeding
+Jalankan migrasi tabel dan seeding data dummy awal (seperti akun administrator, mahasiswa, kategori, dan dataset judul skripsi pembanding):
+```bash
+# Membuat struktur tabel basis data
+php spark migrate
+
+# Memasukkan data awal & data judul skripsi
+php spark db:seed DatabaseSeeder
+```
+
+### 5. Prapemrosesan Judul Awal
+Karena skripsi yang diimpor melalui seeder perlu diproses terlebih dahulu untuk menghitung similaritas kosinus secara instan, jalankan perintah pra-pemrosesan awal:
+```bash
+php spark app:preprocess-existing
+```
+
+### 6. Jalankan Server Lokal
+Nyalakan server pengembangan lokal:
+```bash
+php spark serve
+```
+Buka peramban (*browser*) dan akses halaman di `http://localhost:8080`.
 
 ## Struktur Database
 
@@ -198,6 +245,5 @@ Proyek ini dilisensikan di bawah **MIT License**.
 ---
 
 <p align="center">
-  Dikembangkan untuk Program Studi Teknik Informatika<br>
-  Universitas Malikussaleh
+  Tim I
 </p>

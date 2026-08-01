@@ -112,10 +112,6 @@ class SimilarityCalculator
         $intersection = array_intersect($setA, $setB);
         $union        = array_unique(array_merge($setA, $setB));
 
-        if (count($union) === 0) {
-            return 0.0;
-        }
-
         return round(count($intersection) / count($union), 6);
     }
 

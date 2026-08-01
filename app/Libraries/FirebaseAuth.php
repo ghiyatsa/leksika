@@ -41,9 +41,6 @@ class FirebaseAuth
         if ($decoded->iss !== "https://securetoken.google.com/{$this->config->projectId}") {
             return null;
         }
-        if (isset($decoded->exp) && $decoded->exp < time()) {
-            return null;
-        }
 
         return $decoded;
     }
@@ -110,6 +107,7 @@ class FirebaseAuth
             $client = \Config\Services::curlrequest();
             try {
                 $client->post('https://identitytoolkit.googleapis.com/v1/accounts:update', [
+                    'verify'  => (defined('ENVIRONMENT') ? ENVIRONMENT : 'production') === 'production',
                     'headers' => ['Authorization' => "Bearer {$accessToken}"],
                     'json'    => ['localId' => $uid, 'emailVerified' => true],
                 ]);
@@ -166,16 +164,6 @@ class FirebaseAuth
         return ! isset($response['error']);
     }
 
-    public function sendEmailVerification(string $idToken): bool
-    {
-        $response = $this->postJson(
-            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={$this->config->apiKey}",
-            ['requestType' => 'VERIFY_EMAIL', 'idToken' => $idToken]
-        );
-
-        return ! isset($response['error']);
-    }
-
     public function sendPasswordResetEmail(string $email): bool
     {
         $response = $this->postJson(
@@ -196,7 +184,9 @@ class FirebaseAuth
 
         try {
             $client   = \Config\Services::curlrequest();
-            $response = $client->get('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com');
+            $response = $client->get('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com', [
+                'verify' => (defined('ENVIRONMENT') ? ENVIRONMENT : 'production') === 'production',
+            ]);
             $certs    = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             log_message('error', 'Ambil kunci publik Firebase gagal: ' . $e->getMessage());
@@ -252,6 +242,7 @@ class FirebaseAuth
 
         $client   = \Config\Services::curlrequest();
         $response = $client->post('https://oauth2.googleapis.com/token', [
+            'verify'      => (defined('ENVIRONMENT') ? ENVIRONMENT : 'production') === 'production',
             'form_params' => [
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion'  => $jwt,
@@ -273,7 +264,10 @@ class FirebaseAuth
     {
         $client = \Config\Services::curlrequest();
         try {
-            $response = $client->post($url, ['json' => $data]);
+            $response = $client->post($url, [
+                'verify' => (defined('ENVIRONMENT') ? ENVIRONMENT : 'production') === 'production',
+                'json'   => $data,
+            ]);
             return json_decode($response->getBody(), true) ?? [];
         } catch (\Exception $e) {
             log_message('error', 'Panggilan REST Firebase gagal: ' . $e->getMessage());
