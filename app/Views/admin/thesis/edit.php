@@ -45,17 +45,6 @@
         </div>
 
         <div class="form-group">
-            <label for="keyword" class="form-label">Kata Kunci (Keyword)</label>
-            <input type="text" id="keyword" name="keyword" class="form-control"
-                   value="<?= esc(old('keyword', $thesis['keyword'])) ?>">
-        </div>
-
-        <div class="form-group">
-            <label for="abstract" class="form-label">Abstrak</label>
-            <textarea id="abstract" name="abstract" class="form-control" rows="4"><?= esc(old('abstract', $thesis['abstract'])) ?></textarea>
-        </div>
-
-        <div class="form-group">
             <label for="year" class="form-label">Tahun Skripsi</label>
             <input type="number" id="year" name="year" class="form-control"
                    min="2000" max="<?= date('Y') ?>"

@@ -18,9 +18,9 @@
                 id="search-thesis"
                 name="search"
                 class="form-control"
-                placeholder="Cari judul, mahasiswa, kategori, keyword..."
+                placeholder="Cari judul, mahasiswa, kategori..."
                 value="<?= esc($search) ?>"
-                aria-label="Cari judul, mahasiswa, kategori, atau keyword"
+                aria-label="Cari judul, mahasiswa, atau kategori"
             >
         </div>
         <button type="submit" class="btn btn-primary">Cari</button>
@@ -72,9 +72,6 @@
                             </td>
                             <td style="max-width: 320px;">
                                 <div class="fw-bold" style="line-height: 1.4; margin-bottom: 4px;"><?= esc($thesis['title']) ?></div>
-                                <?php if ($thesis['keyword']): ?>
-                                    <div class="text-muted text-sm"><?= render_icon('key', ['style' => 'width: 12px; height: 12px; margin-right: 4px; vertical-align: text-bottom;']) ?><?= esc(mb_substr($thesis['keyword'], 0, 60)) ?>...</div>
-                                <?php endif; ?>
                             </td>
                             <td>
                                 <div class="fw-bold"><?= esc($thesis['student_name']) ?></div>

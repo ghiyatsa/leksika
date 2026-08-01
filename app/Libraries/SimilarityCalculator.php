@@ -141,7 +141,6 @@ class SimilarityCalculator
      * Jalankan pemeriksaan similaritas secara lengkap.
      *
      * @param  string $inputTitle        Judul baru yang akan diperiksa
-     * @param  string $inputKeyword       Kata kunci judul baru
      * @param  array  $thesisCollection  Array dari ThesisModel::getAllForSimilarity()
      * @param  array  $threshold         ['cosine_weight', 'jaccard_weight', 'similar_threshold', 'review_threshold']
      * @param  TextPreprocessor $preprocessor
@@ -149,7 +148,6 @@ class SimilarityCalculator
      */
     public function runCheck(
         string $inputTitle,
-        string $inputKeyword,
         array $thesisCollection,
         array $threshold,
         TextPreprocessor $preprocessor
@@ -160,7 +158,7 @@ class SimilarityCalculator
         $rt = (float) $threshold['review_threshold'];
 
         // ── Pra-pemrosesan ────────────────────────────────────────────
-        $inputText   = $inputTitle . ' ' . $inputKeyword;
+        $inputText   = $inputTitle;
         $inputTokens = $preprocessor->preprocess($inputText);
 
         // Bangun korpus lengkap untuk TF-IDF:
@@ -171,7 +169,7 @@ class SimilarityCalculator
             if ($prepText !== '') {
                 $corpus[$thesis['id']] = explode(' ', $prepText);
             } else {
-                $docText = ($thesis['title'] ?? '') . ' ' . ($thesis['keyword'] ?? '');
+                $docText = $thesis['title'] ?? '';
                 $corpus[$thesis['id']] = $preprocessor->preprocess($docText);
             }
         }
@@ -194,7 +192,6 @@ class SimilarityCalculator
             $results[] = [
                 'thesis_id'        => $thesis['id'],
                 'thesis_title'     => $thesis['title'],
-                'thesis_keyword'   => $thesis['keyword'],
                 'nim'              => $thesis['nim'],
                 'student_name'     => $thesis['student_name'],
                 'category_name'    => $thesis['category_name'],

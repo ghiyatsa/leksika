@@ -12,7 +12,7 @@ class ThesisModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['student_id', 'category_id', 'title', 'keyword', 'abstract', 'year', 'preprocessed_text'];
+    protected $allowedFields    = ['student_id', 'category_id', 'title', 'year', 'preprocessed_text'];
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
@@ -30,21 +30,10 @@ class ThesisModel extends Model
     protected function preprocessText(array $data): array
     {
         $title = $data['data']['title'] ?? null;
-        $keyword = $data['data']['keyword'] ?? null;
 
-        if ($title !== null || $keyword !== null) {
-            if ($title === null || $keyword === null) {
-                $id = $data['id'][0] ?? ($data['id'] ?? null);
-                if ($id) {
-                    $existing = $this->find($id);
-                    if ($existing) {
-                        $title = $title ?? $existing['title'] ?? '';
-                        $keyword = $keyword ?? $existing['keyword'] ?? '';
-                    }
-                }
-            }
+        if ($title !== null) {
             $preprocessor = service('textPreprocessor');
-            $tokens = $preprocessor->preprocess(($title ?? '') . ' ' . ($keyword ?? ''));
+            $tokens = $preprocessor->preprocess($title);
             $data['data']['preprocessed_text'] = implode(' ', $tokens);
         }
 
@@ -62,7 +51,6 @@ class ThesisModel extends Model
         if ($search !== '') {
             $builder->groupStart()
                 ->like('tt.title', $search)
-                ->orLike('tt.keyword', $search)
                 ->orLike('s.name', $search)
                 ->orLike('s.student_id', $search)
                 ->orLike('tc.category_name', $search)
@@ -96,7 +84,7 @@ class ThesisModel extends Model
     public function getAllForSimilarity(): array
     {
         return $this->db->table('thesis tt')
-            ->select('tt.id, tt.title, tt.keyword, tt.preprocessed_text, s.student_id AS nim, s.name AS student_name, tc.category_name, tt.year')
+            ->select('tt.id, tt.title, tt.preprocessed_text, s.student_id AS nim, s.name AS student_name, tc.category_name, tt.year')
             ->join('students s', 's.id = tt.student_id')
             ->join('topic_categories tc', 'tc.id = tt.category_id')
             ->get()

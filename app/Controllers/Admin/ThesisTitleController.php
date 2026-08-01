@@ -48,8 +48,6 @@ class ThesisTitleController extends BaseController
             'student_id'  => 'required|integer',
             'category_id' => 'required|integer',
             'title'       => 'required|min_length[10]',
-            'keyword'     => 'permit_empty',
-            'abstract'    => 'permit_empty',
             'year'        => 'permit_empty|integer',
         ];
 
@@ -61,8 +59,6 @@ class ThesisTitleController extends BaseController
             'student_id'  => $this->request->getPost('student_id'),
             'category_id' => $this->request->getPost('category_id'),
             'title'       => $this->request->getPost('title'),
-            'keyword'     => $this->request->getPost('keyword'),
-            'abstract'    => $this->request->getPost('abstract'),
             'year'        => $this->request->getPost('year') ?: null,
         ]);
 
@@ -94,8 +90,6 @@ class ThesisTitleController extends BaseController
             'student_id'  => 'required|integer',
             'category_id' => 'required|integer',
             'title'       => 'required|min_length[10]',
-            'keyword'     => 'permit_empty',
-            'abstract'    => 'permit_empty',
             'year'        => 'permit_empty|integer',
         ];
 
@@ -107,8 +101,6 @@ class ThesisTitleController extends BaseController
             'student_id'  => $this->request->getPost('student_id'),
             'category_id' => $this->request->getPost('category_id'),
             'title'       => $this->request->getPost('title'),
-            'keyword'     => $this->request->getPost('keyword'),
-            'abstract'    => $this->request->getPost('abstract'),
             'year'        => $this->request->getPost('year') ?: null,
         ]);
 

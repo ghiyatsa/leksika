@@ -23,7 +23,7 @@ class PreprocessExisting extends BaseCommand
         $preprocessor = new TextPreprocessor();
         $db = \Config\Database::connect();
         
-        $records = $db->table('thesis')->select('id, title, keyword')->get()->getResultArray();
+        $records = $db->table('thesis')->select('id, title')->get()->getResultArray();
         $total = count($records);
         
         if ($total === 0) {
@@ -35,7 +35,7 @@ class PreprocessExisting extends BaseCommand
         
         $count = 0;
         foreach ($records as $row) {
-            $inputText = ($row['title'] ?? '') . ' ' . ($row['keyword'] ?? '');
+            $inputText = ($row['title'] ?? '');
             $tokens = $preprocessor->preprocess($inputText);
             $prepText = implode(' ', $tokens);
             

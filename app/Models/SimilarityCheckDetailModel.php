@@ -18,7 +18,7 @@ class SimilarityCheckDetailModel extends Model
     public function getDetailsByCheckId(int $checkId): array
     {
         return $this->db->table('similarity_check_details scd')
-            ->select('scd.*, tt.title AS thesis_title, tt.keyword AS thesis_keyword, tt.year,
+            ->select('scd.*, tt.title AS thesis_title, tt.year,
                       s.student_id AS nim, s.name AS student_name, tc.category_name')
             ->join('thesis tt', 'tt.id = scd.thesis_id')
             ->join('students s', 's.id = tt.student_id')

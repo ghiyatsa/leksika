@@ -53,7 +53,7 @@ class SimilarityController extends BaseController
 
         $threshold = $this->thresholdModel->getSettings();
 
-        $results = $this->calculator->runCheck($inputTitle, '', $thesisCollection, $threshold, $this->preprocessor);
+        $results = $this->calculator->runCheck($inputTitle, $thesisCollection, $threshold, $this->preprocessor);
 
         $maxResults = (int) ($threshold['max_similarity_results'] ?? 5);
         $results    = array_slice($results, 0, $maxResults);

@@ -82,7 +82,7 @@ Dimana $t_r$ adalah _review threshold_ (default 0,40) dan $t_s$ adalah _similar 
 
 ```mermaid
 flowchart TD
-    A[Masukan: Judul + Kata Kunci] --> B[TextPreprocessor]
+    A[Masukan: Judul] --> B[TextPreprocessor]
     B --> C[Case folding]
     C --> D[Cleansing]
     D --> E[Stopword removal]
@@ -106,7 +106,7 @@ flowchart TD
 
 ## Dataset
 
-Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahasiswa Program Studi Teknik Informatika Universitas Malikussaleh, mencakup 126 judul skripsi dari berbagai kategori topik, antara lain:
+Dataset judul skripsi yang digunakan dalam sistem merupakan data riil dari mahasiswa Program Studi Teknik Informatika Universitas Malikussaleh, mencakup 481 judul skripsi dari berbagai kategori topik, antara lain:
 
 - Kecerdasan Buatan
 - Pengembangan Web
@@ -213,8 +213,6 @@ erDiagram
         int student_id FK
         int category_id FK
         varchar title
-        varchar keyword
-        longtext abstract
         year year
         text preprocessed_text
     }

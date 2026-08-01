@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<?php $cssSfx = ENVIRONMENT === 'production' ? '.min' : ''; ?>
+<?php $cssSfx = file_exists(FCPATH . 'css/style.min.css') ? '.min' : ''; ?>
     <link rel="stylesheet" href="<?= base_url('css/style' . $cssSfx . '.css') ?>?v=<?= filemtime(FCPATH . 'css/style' . $cssSfx . '.css') ?>">
     <script>
         (function() {
@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<?php $jsSfx = ENVIRONMENT === 'production' ? '.min' : ''; ?>
+<?php $jsSfx = file_exists(FCPATH . 'js/app.min.js') ? '.min' : ''; ?>
 <script src="<?= base_url('js/app' . $jsSfx . '.js') ?>?v=<?= filemtime(FCPATH . 'js/app' . $jsSfx . '.js') ?>" defer></script>
 
 <!-- Command Palette Modal -->

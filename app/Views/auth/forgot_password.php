@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<?php $cssSfx = ENVIRONMENT === 'production' ? '.min' : ''; ?>
+<?php $cssSfx = file_exists(FCPATH . 'css/style.min.css') ? '.min' : ''; ?>
     <link rel="stylesheet" href="<?= base_url('css/style' . $cssSfx . '.css') ?>?v=<?= filemtime(FCPATH . 'css/style' . $cssSfx . '.css') ?>">
     <style>.login-card .form-group { margin-bottom: 14px; }</style>
     <script>
