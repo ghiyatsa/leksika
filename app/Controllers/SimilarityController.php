@@ -7,14 +7,14 @@ use App\Libraries\TextPreprocessor;
 use App\Models\SimilarityCheckDetailModel;
 use App\Models\SimilarityCheckModel;
 use App\Models\ThesisModel;
-use App\Models\ThresholdSettingModel;
+use App\Models\SystemSettingModel;
 
 class SimilarityController extends BaseController
 {
     private SimilarityCheckModel $checkModel;
     private SimilarityCheckDetailModel $detailModel;
     private ThesisModel $thesisModel;
-    private ThresholdSettingModel $thresholdModel;
+    private SystemSettingModel $thresholdModel;
     private TextPreprocessor $preprocessor;
     private SimilarityCalculator $calculator;
 
@@ -23,7 +23,7 @@ class SimilarityController extends BaseController
         $this->checkModel     = model(SimilarityCheckModel::class);
         $this->detailModel    = model(SimilarityCheckDetailModel::class);
         $this->thesisModel    = model(ThesisModel::class);
-        $this->thresholdModel = model(ThresholdSettingModel::class);
+        $this->thresholdModel = model(SystemSettingModel::class);
         $this->preprocessor   = service('textPreprocessor');
         $this->calculator     = service('similarityCalculator');
     }

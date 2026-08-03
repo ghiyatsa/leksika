@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\SimilarityCheckDetailModel;
 use App\Models\SimilarityCheckModel;
 use App\Models\ThesisModel;
-use App\Models\ThresholdSettingModel;
+use App\Models\SystemSettingModel;
 use App\Models\UserModel;
 
 class DashboardController extends BaseController
@@ -13,14 +13,14 @@ class DashboardController extends BaseController
     private ThesisModel $thesisModel;
     private SimilarityCheckModel $checkModel;
     private UserModel $userModel;
-    private ThresholdSettingModel $thresholdModel;
+    private SystemSettingModel $thresholdModel;
 
     public function __construct()
     {
         $this->thesisModel    = model(ThesisModel::class);
         $this->checkModel     = model(SimilarityCheckModel::class);
         $this->userModel      = model(UserModel::class);
-        $this->thresholdModel = model(ThresholdSettingModel::class);
+        $this->thresholdModel = model(SystemSettingModel::class);
     }
 
     public function index(): string

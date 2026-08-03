@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateThresholdSettingsTable extends Migration
+class CreateSystemSettingsTable extends Migration
 {
     public function up(): void
     {
@@ -17,11 +17,11 @@ class CreateThresholdSettingsTable extends Migration
             'max_similarity_results' => ['type' => 'INT', 'constraint' => 11, 'default' => 5],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('threshold_settings');
+        $this->forge->createTable('system_settings');
     }
 
     public function down(): void
     {
-        $this->forge->dropTable('threshold_settings');
+        $this->forge->dropTable('system_settings');
     }
 }

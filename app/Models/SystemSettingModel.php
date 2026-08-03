@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ThresholdSettingModel extends Model
+class SystemSettingModel extends Model
 {
-    protected $table            = 'threshold_settings';
+    protected $table            = 'system_settings';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

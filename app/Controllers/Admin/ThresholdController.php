@@ -3,15 +3,15 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Models\ThresholdSettingModel;
+use App\Models\SystemSettingModel;
 
 class ThresholdController extends BaseController
 {
-    private ThresholdSettingModel $model;
+    private SystemSettingModel $model;
 
     public function __construct()
     {
-        $this->model = model(ThresholdSettingModel::class);
+        $this->model = model(SystemSettingModel::class);
     }
 
     public function index(): string

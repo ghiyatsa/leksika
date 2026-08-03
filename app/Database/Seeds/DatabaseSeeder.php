@@ -1048,7 +1048,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // ── 5. PENGATURAN AMBANG BATAS ────────────────────────────────
-        $this->db->table('threshold_settings')->insert([
+        $this->db->table('system_settings')->insert([
             'cosine_weight'          => 0.60,
             'jaccard_weight'         => 0.40,
             'similar_threshold'      => 0.75,
@@ -1069,7 +1069,7 @@ class DatabaseSeeder extends Seeder
             ->get()
             ->getResultArray();
 
-        $threshold = $this->db->table('threshold_settings')->get()->getRowArray();
+        $threshold = $this->db->table('system_settings')->get()->getRowArray();
 
         $calculator   = new SimilarityCalculator();
         $users        = $this->db->table('users')->where('role', 'user')->get()->getResultArray();
