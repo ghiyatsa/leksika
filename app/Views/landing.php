@@ -172,7 +172,7 @@
                     <span>Kelola Data Skripsi</span>
                     <span class="cmd-badge">Admin</span>
                 </a>
-                <a href="<?= base_url('admin/threshold') ?>" class="cmd-item">
+                <a href="<?= base_url('admin/system-settings') ?>" class="cmd-item">
                     <?= render_icon('settings', ['style' => 'width: 16px; height: 16px;']) ?>
                     <span>Pengaturan Sistem</span>
                     <span class="cmd-badge">Admin</span>

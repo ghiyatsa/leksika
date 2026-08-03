@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\SystemSettingModel;
 
-class ThresholdController extends BaseController
+class SystemSettingController extends BaseController
 {
     private SystemSettingModel $model;
 
@@ -16,7 +16,7 @@ class ThresholdController extends BaseController
 
     public function index(): string
     {
-        return view('admin/threshold/index', [
+        return view('admin/system_settings/index', [
             'title'     => 'Pengaturan Sistem',
             'threshold' => $this->model->getSettings(),
         ]);
@@ -57,6 +57,6 @@ class ThresholdController extends BaseController
             'max_similarity_results' => (int) $this->request->getPost('max_similarity_results'),
         ]);
 
-        return redirect()->to(base_url('admin/threshold'))->with('success', 'Pengaturan threshold berhasil disimpan.');
+        return redirect()->to(base_url('admin/system-settings'))->with('success', 'Pengaturan threshold berhasil disimpan.');
     }
 }

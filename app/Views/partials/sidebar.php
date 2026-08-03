@@ -51,7 +51,7 @@ $userName    = session()->get('userName') ?? 'U';
         <a href="<?= base_url('admin/users') ?>" class="sidebar-link <?= isActive('/admin/users', $currentUri) ?>">
             <span class="icon"><?= render_icon('users') ?></span> Manajemen Akun
         </a>
-        <a href="<?= base_url('admin/threshold') ?>" class="sidebar-link <?= isActive('/admin/threshold', $currentUri) ?>">
+        <a href="<?= base_url('admin/system-settings') ?>" class="sidebar-link <?= isActive('/admin/system-settings', $currentUri) ?>">
             <span class="icon"><?= render_icon('settings') ?></span> Pengaturan
         </a>
         <?php endif; ?>

@@ -37,7 +37,7 @@
     <span>Semua perubahan konfigurasi akan diterapkan secara real-time untuk pengecekan judul skripsi berikutnya.</span>
 </div>
 
-<form action="<?= base_url('admin/threshold/update') ?>" method="POST" id="threshold-form">
+<form action="<?= base_url('admin/system-settings/update') ?>" method="POST" id="threshold-form">
     <?= csrf_field() ?>
 
     <div class="settings-grid">

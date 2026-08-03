@@ -58,9 +58,9 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
         $routes->post('categories/(:num)/update', 'Admin\CategoryController::update/$1');
         $routes->post('categories/(:num)/delete', 'Admin\CategoryController::delete/$1');
 
-        // Pengaturan Ambang Batas
-        $routes->get('threshold', 'Admin\ThresholdController::index');
-        $routes->post('threshold/update', 'Admin\ThresholdController::update');
+        // Pengaturan Sistem
+        $routes->get('system-settings', 'Admin\SystemSettingController::index');
+        $routes->post('system-settings/update', 'Admin\SystemSettingController::update');
 
         // CRUD Manajemen Pengguna
         $routes->get('users', 'Admin\UserManagementController::index');
